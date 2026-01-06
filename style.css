@@ -526,10 +526,15 @@ body {
 }
 
 /* Enhanced option styling for human memorable */
-.option:has(input#humanMemorable:checked) {
+.option:has(#humanMemorable:checked) {
     background: rgba(0, 255, 255, 0.1);
     border: 1px solid #00ffff;
     box-shadow: 0 0 10px rgba(0, 255, 255, 0.2);
+}
+
+.option:has(#humanMemorable:checked) label {
+    color: #00ffff;
+    text-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
 }
 
 /* Accessibility */

@@ -84,6 +84,9 @@ class PasswordGenerator {
     }
 
     setupEventListeners() {
+        // Initialize option styles
+        this.updateOptionStyles();
+        
         // Length slider
         this.lengthSlider.addEventListener('input', () => {
             this.lengthValue.textContent = this.lengthSlider.value;
@@ -94,6 +97,7 @@ class PasswordGenerator {
         Object.values(this.options).forEach(option => {
             option.addEventListener('change', () => {
                 this.toggleMemorableInfo();
+                this.updateOptionStyles();
                 this.generatePassword();
             });
         });
@@ -401,6 +405,23 @@ class PasswordGenerator {
             infoSection.style.display = 'flex';
         } else {
             infoSection.style.display = 'none';
+        }
+    }
+
+    updateOptionStyles() {
+        const humanMemorableOption = document.querySelector('.option:has(#humanMemorable)');
+        if (this.options.humanMemorable.checked) {
+            humanMemorableOption.style.background = 'rgba(0, 255, 255, 0.1)';
+            humanMemorableOption.style.border = '1px solid #00ffff';
+            humanMemorableOption.style.boxShadow = '0 0 10px rgba(0, 255, 255, 0.2)';
+            humanMemorableOption.querySelector('label').style.color = '#00ffff';
+            humanMemorableOption.querySelector('label').style.textShadow = '0 0 5px rgba(0, 255, 255, 0.5)';
+        } else {
+            humanMemorableOption.style.background = '';
+            humanMemorableOption.style.border = '';
+            humanMemorableOption.style.boxShadow = '';
+            humanMemorableOption.querySelector('label').style.color = '';
+            humanMemorableOption.querySelector('label').style.textShadow = '';
         }
     }
 }
