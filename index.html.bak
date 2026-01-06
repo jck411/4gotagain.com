@@ -72,6 +72,14 @@
                         <div class="strength-text" id="strengthText">Medium</div>
                     </div>
 
+                    <div class="memorable-info" id="memorableInfo" style="display: none;">
+                        <div class="memorable-icon">🧠</div>
+                        <div class="memorable-text">
+                            <strong>Human-Memorable Mode Active</strong>
+                            <p>Using actual words for easier recall</p>
+                        </div>
+                    </div>
+
                     <button id="generateBtn" class="generate-btn">
                         <span class="btn-text">Generate Password</span>
                         <div class="btn-glow"></div>

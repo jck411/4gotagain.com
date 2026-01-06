@@ -406,19 +406,11 @@ class PasswordGenerator {
     }
 
     updateOptionStyles() {
-        const humanMemorableOption = document.querySelector('.option:has(#humanMemorable)');
+        const humanMemorableOption = document.querySelector('.human-memorable-option');
         if (this.options.humanMemorable.checked) {
-            humanMemorableOption.style.background = 'rgba(0, 255, 255, 0.1)';
-            humanMemorableOption.style.border = '1px solid #00ffff';
-            humanMemorableOption.style.boxShadow = '0 0 10px rgba(0, 255, 255, 0.2)';
-            humanMemorableOption.querySelector('label').style.color = '#00ffff';
-            humanMemorableOption.querySelector('label').style.textShadow = '0 0 5px rgba(0, 255, 255, 0.5)';
+            humanMemorableOption.classList.add('selected');
         } else {
-            humanMemorableOption.style.background = '';
-            humanMemorableOption.style.border = '';
-            humanMemorableOption.style.boxShadow = '';
-            humanMemorableOption.querySelector('label').style.color = '';
-            humanMemorableOption.querySelector('label').style.textShadow = '';
+            humanMemorableOption.classList.remove('selected');
         }
     }
 }

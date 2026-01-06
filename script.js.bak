@@ -428,31 +428,6 @@ class PasswordGenerator {
 // Initialize everything when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     new PasswordGenerator();
-    createMatrixRain();
-    
-    // Add some interactive effects
-    document.addEventListener('mousemove', (e) => {
-        const cursor = document.querySelector('.cursor-glow');
-        if (!cursor) {
-            const glow = document.createElement('div');
-            glow.className = 'cursor-glow';
-            glow.style.cssText = `
-                position: fixed;
-                width: 20px;
-                height: 20px;
-                background: radial-gradient(circle, rgba(0, 255, 65, 0.3), transparent);
-                border-radius: 50%;
-                pointer-events: none;
-                z-index: 9999;
-                transition: transform 0.1s ease;
-            `;
-            document.body.appendChild(glow);
-        }
-        
-        const glow = document.querySelector('.cursor-glow');
-        glow.style.left = e.clientX - 10 + 'px';
-        glow.style.top = e.clientY - 10 + 'px';
-    });
     
     // Add keyboard shortcuts
     document.addEventListener('keydown', (e) => {
