@@ -411,11 +411,10 @@ class PasswordGenerator {
                 <input type="text" class="password-output" readonly placeholder="Your password will appear here...">
                 <div class="password-actions">
                     <button class="generate-row-btn" title="Generate this password" aria-label="Generate this password">
-                        <span class="btn-text">Generate</span>
+                        <span class="btn-text">Gen</span>
                     </button>
                     <button class="copy-btn" title="Copy to clipboard">
                         <span class="copy-icon">📋</span>
-                        <span class="copy-text">Copy</span>
                     </button>
                     <button class="remove-row-btn" title="Remove this password" aria-label="Remove this password">
                         <span class="remove-icon">×</span>
