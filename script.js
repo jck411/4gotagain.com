@@ -414,13 +414,13 @@ class PasswordGenerator {
                 <input type="text" class="password-output" readonly placeholder="Your password will appear here...">
                 <div class="password-actions">
                     <button class="action-btn generate-row-btn" title="Generate new password" aria-label="Generate new password">
-                        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2v6h-6"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M3 22v-6h6"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/></svg>
+                        <span class="btn-icon" aria-hidden="true">&#x21bb;</span>
                     </button>
                     <button class="action-btn copy-btn" title="Copy to clipboard">
-                        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                        <span class="btn-icon" aria-hidden="true">&#x2398;</span>
                     </button>
                     <button class="action-btn remove-row-btn" title="Remove this password" aria-label="Remove this password">
-                        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                        <span class="btn-icon" aria-hidden="true">&times;</span>
                     </button>
                 </div>
             </div>

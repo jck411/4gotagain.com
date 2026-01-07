@@ -492,8 +492,12 @@ header {
 }
 
 .action-btn .btn-icon {
-    width: 18px;
-    height: 18px;
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     transition: transform var(--transition-base);
 }
 
