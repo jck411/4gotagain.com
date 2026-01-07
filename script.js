@@ -415,14 +415,28 @@ class PasswordGenerator {
                 <input type="text" id="password-${this.passwordCount - 1}" class="password-output" readonly placeholder="Your password will appear here..." aria-label="Generated password">
                 <div class="password-actions">
                     <button class="action-btn generate-row-btn" title="Generate new password" aria-label="Generate new password">
-                        <!-- Generate Icon -->
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/>
+                        </svg>
                     </button>
                     <button class="action-btn copy-btn" title="Copy to clipboard" aria-label="Copy password to clipboard">
-                        <span class="copy-icon-default"></span>
-                        <span class="copy-icon-success"></span>
+                        <span class="copy-icon-default">
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                            </svg>
+                        </span>
+                        <span class="copy-icon-success">
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </span>
                     </button>
                     <button class="action-btn remove-row-btn" title="Remove this password" aria-label="Remove this password">
-                        <!-- Remove Icon -->
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <line x1="18" y1="6" x2="6" y2="18"/>
+                            <line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
                     </button>
                 </div>
             </div>
@@ -868,12 +882,7 @@ class PasswordGenerator {
 
         try {
             await navigator.clipboard.writeText(password);
-            this.showSuccessMessage();
-            this.animateCopyButton(copyBtn);
-        } catch (err) {
-            // Fallback for older browsers
-            this.fallbackCopyTextToClipboard(password, copyBtn);
-        }CopyFeedback(copyBtn);
+            this.showCopyFeedback(copyBtn);
         } catch (err) {
             // Fallback for older browsers
             this.fallbackCopyTextToClipboard(password, copyBtn);
@@ -904,24 +913,16 @@ class PasswordGenerator {
     showCopyFeedback(copyBtn) {
         copyBtn.classList.add('copied');
         setTimeout(() => {
-            copyBtn.classList.remove('copied(-3px) scale(1.05)';
-        setTimeout(() => {
-            this.generateBtn.style.transform = '';
-        }, 200);
+            copyBtn.classList.remove('copied');
+        }, 1000);
     }
 
-    animateCopyButton(copyBtn) {
-        copyBtn.classList.add('copied');
-
-        setTimeout(() => {
-        // This method is now deprecated in favor of the CSS-only animation in showCopyFeedbackrdInput(input) {
-        input.style.transform = 'scale(1.02)';
-        input.style.boxShadow = '0 0 20px rgba(0, 255, 65, 0.5)';
-
+    animatePasswordInput(input) {
+        // Optional: Add subtle animation when password is generated
+        input.style.transform = 'scale(1.01)';
         setTimeout(() => {
             input.style.transform = '';
-            input.style.boxShadow = '';
-        }, 300);
+        }, 200);
     }
 
     toggleMemorableInfo() {
