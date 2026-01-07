@@ -292,7 +292,6 @@ header {
     font-size: 0.875rem;
     font-weight: 500;
     color: var(--text-secondary);
-    margin-right: auto;
 }
 
 .password-count-label span {
@@ -386,10 +385,11 @@ header {
     pointer-events: none;
 }
 
-/* Password Actions - compact buttons */
+/* Password Actions - consistent button group */
 .password-actions {
     display: flex;
-    gap: 0.35rem;
+    align-items: center;
+    gap: 0.5rem;
     flex-shrink: 0;
 }
 
@@ -467,14 +467,13 @@ header {
 
 /* Unified action buttons for password rows */
 .action-btn {
-    width: 36px;
-    height: 36px;
+    width: 40px;
+    height: 40px;
     padding: 0;
     background: var(--bg-elevated);
     border: 1px solid var(--border-default);
-    border-radius: var(--radius-sm);
-    color: var(--text-secondary);
-    font-size: 1rem;
+    border-radius: var(--radius-md);
+    color: var(--text-muted);
     cursor: pointer;
     transition: all var(--transition-base);
     display: flex;
@@ -488,21 +487,38 @@ header {
     color: var(--text-primary);
 }
 
+.action-btn:active {
+    transform: scale(0.95);
+}
+
 .action-btn .btn-icon {
-    line-height: 1;
+    width: 18px;
+    height: 18px;
     transition: transform var(--transition-base);
 }
 
-/* Generate button - accent colored */
+/* Generate button - amber accent */
 .action-btn.generate-row-btn {
-    background: var(--accent);
-    border-color: var(--accent);
-    color: var(--bg-deep);
+    border-color: rgba(226, 168, 75, 0.4);
+    color: var(--accent);
 }
 
 .action-btn.generate-row-btn:hover {
-    filter: brightness(1.1);
-    box-shadow: 0 2px 8px rgba(226, 168, 75, 0.25);
+    background: var(--accent-soft);
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+/* Copy button - amber accent */
+.action-btn.copy-btn {
+    border-color: rgba(226, 168, 75, 0.4);
+    color: var(--accent);
+}
+
+.action-btn.copy-btn:hover {
+    background: var(--accent-soft);
+    border-color: var(--accent);
+    color: var(--accent);
 }
 
 /* Spinning animation for refresh */
@@ -520,18 +536,25 @@ header {
     animation: spin 0.5s ease-out;
 }
 
-/* Remove button hover */
+/* Remove button */
+.action-btn.remove-row-btn {
+    width: 40px;
+    height: 40px;
+    border-color: var(--border-subtle);
+    color: var(--text-muted);
+}
+
 .action-btn.remove-row-btn:hover {
     background: rgba(224, 82, 82, 0.15);
-    border-color: #e05252;
+    border-color: rgba(224, 82, 82, 0.5);
     color: #e05252;
 }
 
-/* Copy button success state */
+/* Copy button success state - brief flash */
 .action-btn.copy-btn.copied {
-    background: var(--accent-cool);
+    background: var(--accent-cool-soft);
     border-color: var(--accent-cool);
-    color: var(--bg-deep);
+    color: var(--accent-cool);
 }
 
 .tips-btn.active {
@@ -546,45 +569,29 @@ header {
 }
 
 /* ==========================================================================
-   Strength Meter
+   Inline Strength Indicator
    ========================================================================== */
 
-.strength-section {
-    margin-bottom: 2rem;
-}
-
-.strength-meter {
-    margin-bottom: 1.5rem;
-}
-
-.strength-label {
+.password-strength-inline {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
     font-size: 0.875rem;
     font-weight: 500;
-    color: var(--text-secondary);
-    margin-bottom: 0.5rem;
 }
 
-.strength-bar {
-    height: 6px;
-    background: var(--bg-elevated);
-    border-radius: 3px;
-    overflow: hidden;
-    margin-bottom: 0.5rem;
-}
-
-.strength-fill {
-    height: 100%;
-    width: 0%;
-    background: var(--strength-weak);
-    border-radius: 3px;
-    transition: width var(--transition-slow), background var(--transition-slow);
+.strength-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--strength-good);
+    transition: background var(--transition-base);
 }
 
 .strength-text {
-    font-size: 0.875rem;
     font-weight: 600;
     color: var(--accent);
-    text-align: center;
+    transition: color var(--transition-base);
 }
 
 /* Action Buttons (Tips, Types, Security) */
@@ -655,10 +662,15 @@ header {
 }
 
 .control-group label {
-    display: block;
     font-size: 0.875rem;
     font-weight: 500;
     color: var(--text-secondary);
+}
+
+.control-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     margin-bottom: 0.75rem;
 }
 

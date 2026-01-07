@@ -148,7 +148,7 @@ class PasswordGenerator {
         this.lengthSlider = document.getElementById('length');
         this.lengthValue = document.getElementById('lengthValue');
         this.lengthLabelText = document.getElementById('lengthLabelText');
-        this.strengthFill = document.getElementById('strengthFill');
+        this.strengthDot = document.getElementById('strengthDot');
         this.strengthText = document.getElementById('strengthText');
         this.successMessage = document.getElementById('successMessage');
 
@@ -414,13 +414,13 @@ class PasswordGenerator {
                 <input type="text" class="password-output" readonly placeholder="Your password will appear here...">
                 <div class="password-actions">
                     <button class="action-btn generate-row-btn" title="Generate new password" aria-label="Generate new password">
-                        <span class="btn-icon">🔄</span>
+                        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2v6h-6"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M3 22v-6h6"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/></svg>
                     </button>
                     <button class="action-btn copy-btn" title="Copy to clipboard">
-                        <span class="btn-icon">📋</span>
+                        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
                     </button>
                     <button class="action-btn remove-row-btn" title="Remove this password" aria-label="Remove this password">
-                        <span class="btn-icon">×</span>
+                        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                     </button>
                 </div>
             </div>
@@ -836,9 +836,7 @@ class PasswordGenerator {
     }
 
     updateStrength(score) {
-        // Ensure the bar fills completely when score is 100
-        this.strengthFill.style.width = score + '%';
-
+        // Update the dot color based on strength
         let text, color;
         if (score < 40) {
             text = 'Weak';
@@ -856,8 +854,7 @@ class PasswordGenerator {
 
         this.strengthText.textContent = text;
         this.strengthText.style.color = color;
-        // Use solid color instead of gradient
-        this.strengthFill.style.background = color;
+        this.strengthDot.style.background = color;
     }
 
     async copyToClipboard(input, copyBtn) {
@@ -916,12 +913,10 @@ class PasswordGenerator {
 
     animateCopyButton(copyBtn) {
         copyBtn.classList.add('copied');
-        copyBtn.querySelector('.copy-text').textContent = 'Copied!';
 
         setTimeout(() => {
             copyBtn.classList.remove('copied');
-            copyBtn.querySelector('.copy-text').textContent = 'Copy';
-        }, 2000);
+        }, 1500);
     }
 
     animatePasswordInput(input) {
