@@ -1,0 +1,11 @@
+# robots.txt for 4gotagain.com
+# https://4gotagain.com/robots.txt
+
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://4gotagain.com/sitemap.xml
+
+# Crawl-delay (optional, be nice to crawlers)
+Crawl-delay: 1

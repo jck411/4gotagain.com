@@ -1,14 +1,133 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" itemscope itemtype="https://schema.org/WebApplication">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>4gotagain.com — Make passwords you won't forget</title>
+
+    <!-- Primary Meta Tags -->
+    <title>Free Password Generator - Create Strong, Memorable Passwords | 4gotagain.com</title>
+    <meta name="title" content="Free Password Generator - Create Strong, Memorable Passwords | 4gotagain.com">
+    <meta name="description" content="Generate secure, memorable passwords instantly. Features include human-readable passwords, rhyming patterns, custom words, and strength analysis. Free, private, no signup required.">
+    <meta name="keywords" content="password generator, strong password, secure password, memorable password, random password, password creator, free password generator, online password tool">
+    <meta name="author" content="4gotagain.com">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="English">
+    <meta name="revisit-after" content="7 days">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://4gotagain.com/">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://4gotagain.com/">
+    <meta property="og:title" content="Free Password Generator - Create Strong, Memorable Passwords">
+    <meta property="og:description" content="Generate secure, memorable passwords instantly. Human-readable options, rhyming patterns, strength analysis. Free and private.">
+    <meta property="og:image" content="https://4gotagain.com/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:site_name" content="4gotagain.com">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://4gotagain.com/">
+    <meta name="twitter:title" content="Free Password Generator - Create Strong, Memorable Passwords">
+    <meta name="twitter:description" content="Generate secure, memorable passwords instantly. Human-readable options, rhyming patterns, strength analysis. Free and private.">
+    <meta name="twitter:image" content="https://4gotagain.com/og-image.png">
+
+    <!-- Schema.org structured data -->
+    <meta itemprop="name" content="4gotagain.com Password Generator">
+    <meta itemprop="description" content="Free online tool to generate strong, memorable passwords with customizable options.">
+    <meta itemprop="image" content="https://4gotagain.com/og-image.png">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <meta name="theme-color" content="#0c0c0e">
+    <meta name="msapplication-TileColor" content="#0c0c0e">
+
     <!-- Preconnect for faster font loading -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- DNS Prefetch for any external resources -->
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+
+    <!-- Stylesheet -->
     <link rel="stylesheet" href="style.css">
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "4gotagain.com Password Generator",
+        "url": "https://4gotagain.com",
+        "description": "Free online password generator that creates strong, memorable passwords. Features include human-readable passwords, rhyming patterns, custom word inclusion, and password strength analysis.",
+        "applicationCategory": "SecurityApplication",
+        "operatingSystem": "Any",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "featureList": [
+            "Generate strong random passwords",
+            "Human-memorable password options",
+            "Rhyming password patterns",
+            "Custom word inclusion",
+            "Password strength meter",
+            "Multiple password generation",
+            "Copy to clipboard",
+            "No signup required",
+            "Works offline",
+            "Privacy-focused - no data stored"
+        ],
+        "screenshot": "https://4gotagain.com/og-image.png",
+        "softwareVersion": "1.0",
+        "author": {
+            "@type": "Organization",
+            "name": "4gotagain.com"
+        }
+    }
+    </script>
+
+    <!-- FAQ Schema for potential rich snippets -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "How do I create a strong password?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Use our password generator to create strong passwords with a mix of uppercase letters, lowercase letters, numbers, and symbols. Aim for at least 16 characters for maximum security."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Are the passwords generated secure?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes, passwords are generated entirely in your browser using cryptographically secure random number generation. No passwords are ever sent to or stored on any server."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "What is a memorable password?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "A memorable password uses real words combined with numbers and symbols, making it easier to remember while still being secure. Our human-memorable mode creates these types of passwords."
+                }
+            }
+        ]
+    }
+    </script>
 </head>
 
 <body>
@@ -21,65 +140,67 @@
         </header>
 
         <main>
-            <div class="generator-card">
-                <div class="password-section">
+            <article class="generator-card" aria-label="Password Generator">
+                <section class="password-section" aria-label="Generated Passwords">
                     <div class="password-controls">
                         <span class="password-count-label">Passwords: <span id="passwordCount">1</span></span>
-                        <button id="removePasswordBtn" class="pw-count-btn" title="Remove password">−</button>
-                        <button id="addPasswordBtn" class="pw-count-btn" title="Add password">+</button>
+                        <button id="removePasswordBtn" class="pw-count-btn" title="Remove password" aria-label="Remove password field">−</button>
+                        <button id="addPasswordBtn" class="pw-count-btn" title="Add password" aria-label="Add password field">+</button>
                     </div>
-                    <div id="passwordList" class="password-list">
-                        <div class="password-slot" data-index="0">
+                    <div id="passwordList" class="password-list" role="list">
+                        <div class="password-slot" data-index="0" role="listitem">
                             <div class="password-display">
-                                <input type="text" class="password-output" readonly
-                                    placeholder="Your password appears here...">
+                                <label for="password-0" class="visually-hidden">Generated password</label>
+                                <input type="text" id="password-0" class="password-output" readonly
+                                    placeholder="Your password appears here..." aria-label="Generated password">
                                 <div class="password-actions">
-                                    <button id="generateBtn" class="generate-btn" title="Generate passwords">
+                                    <button id="generateBtn" class="generate-btn" title="Generate passwords" aria-label="Generate new passwords">
                                         <span class="btn-text">Generate</span>
                                     </button>
-                                    <button class="copy-btn" title="Copy to clipboard">
-                                        <span class="copy-icon">📋</span>
+                                    <button class="copy-btn" title="Copy to clipboard" aria-label="Copy password to clipboard">
+                                        <span class="copy-icon" aria-hidden="true">📋</span>
                                         <span class="copy-text">Copy</span>
                                     </button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                </section>
 
-                <div class="strength-section">
+                <section class="strength-section" aria-label="Password Strength">
                     <div class="strength-meter">
-                        <div class="strength-label">Password Strength:</div>
-                        <div class="strength-bar">
+                        <div class="strength-label" id="strengthLabel">Password Strength:</div>
+                        <div class="strength-bar" role="progressbar" aria-labelledby="strengthLabel" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">
                             <div class="strength-fill" id="strengthFill"></div>
                         </div>
-                        <div class="strength-text" id="strengthText">Medium</div>
+                        <div class="strength-text" id="strengthText" aria-live="polite">Medium</div>
                     </div>
 
                     <div class="action-buttons">
-                        <button id="tipsBtn" class="info-modal-btn tips-btn-style" title="Memory Tips">
-                            <span class="btn-icon">💡</span>
+                        <button id="tipsBtn" class="info-modal-btn tips-btn-style" title="Memory Tips" aria-haspopup="dialog">
+                            <span class="btn-icon" aria-hidden="true">💡</span>
                             <span class="btn-label">Memory Tips</span>
                         </button>
-                        <button id="typesBtn" class="info-modal-btn types-btn-style" title="Password Types">
-                            <span class="btn-icon">🔤</span>
+                        <button id="typesBtn" class="info-modal-btn types-btn-style" title="Password Types" aria-haspopup="dialog">
+                            <span class="btn-icon" aria-hidden="true">🔤</span>
                             <span class="btn-label">Types</span>
                         </button>
-                        <button id="securityBtn" class="info-modal-btn security-btn-style" title="Security">
-                            <span class="btn-icon">🛡️</span>
+                        <button id="securityBtn" class="info-modal-btn security-btn-style" title="Security" aria-haspopup="dialog">
+                            <span class="btn-icon" aria-hidden="true">🛡️</span>
                             <span class="btn-label">Security</span>
                         </button>
                     </div>
-                </div>
+                </section>
 
-                <div class="controls">
+                <section class="controls" aria-label="Password Options">
                     <div class="control-group">
                         <label for="length"><span id="lengthLabelText">Length</span>: <span
                                 id="lengthValue">16</span></label>
-                        <input type="range" id="length" min="8" max="128" value="16">
+                        <input type="range" id="length" min="8" max="128" value="16" aria-describedby="lengthValue">
                     </div>
 
-                    <div class="options">
+                    <fieldset class="options">
+                        <legend class="visually-hidden">Character Options</legend>
                         <div class="option">
                             <input type="checkbox" id="uppercase" checked>
                             <label for="uppercase">ABC Uppercase</label>
@@ -116,82 +237,99 @@
                             <input type="checkbox" id="objectsOnly">
                             <label for="objectsOnly">🎁 Objects Only</label>
                         </div>
-                    </div>
+                    </fieldset>
 
                     <div class="custom-word-section">
                         <label for="customWord">Include Custom Word:</label>
-                        <input type="text" id="customWord" placeholder="Your word here..." maxlength="32">
-                        <div class="word-position-toggle">
+                        <input type="text" id="customWord" placeholder="Your word here..." maxlength="32" autocomplete="off">
+                        <div class="word-position-toggle" role="group" aria-label="Word position">
                             <button type="button" id="wordPositionStart" class="position-btn active"
-                                title="Place word at start">Start</button>
+                                title="Place word at start" aria-pressed="true">Start</button>
                             <button type="button" id="wordPositionEnd" class="position-btn"
-                                title="Place word at end">End</button>
+                                title="Place word at end" aria-pressed="false">End</button>
                         </div>
                     </div>
 
-                    <div class="memorable-info" id="memorableInfo" style="display: none;">
-                        <div class="memorable-icon">🧠</div>
+                    <div class="memorable-info" id="memorableInfo" style="display: none;" role="status">
+                        <div class="memorable-icon" aria-hidden="true">🧠</div>
                         <div class="memorable-text">
                             <strong>Human-Memorable Mode Active</strong>
                             <p>Using actual words for easier recall</p>
                         </div>
                     </div>
 
-                    <div class="memorable-info" id="rhymingInfo" style="display: none;">
-                        <div class="memorable-icon">🎵</div>
+                    <div class="memorable-info" id="rhymingInfo" style="display: none;" role="status">
+                        <div class="memorable-icon" aria-hidden="true">🎵</div>
                         <div class="memorable-text">
                             <strong>Rhyming Mode Active</strong>
                             <p>Generating poetic passwords that rhyme!</p>
                         </div>
                     </div>
 
-                    <div class="memorable-info" id="objectsInfo" style="display: none;">
-                        <div class="memorable-icon">🎁</div>
+                    <div class="memorable-info" id="objectsInfo" style="display: none;" role="status">
+                        <div class="memorable-icon" aria-hidden="true">🎁</div>
                         <div class="memorable-text">
                             <strong>Objects Only Mode Active</strong>
                             <p>Using only object words for easy visualization!</p>
                         </div>
                     </div>
-                </div>
-            </div>
+                </section>
+            </article>
         </main>
 
-        <div class="success-message" id="successMessage">
+        <div class="success-message" id="successMessage" role="alert" aria-live="assertive">
             <span>Password copied to clipboard!</span>
         </div>
 
         <!-- Memory Tips Modal -->
-        <div class="info-modal-overlay" id="tipsModalOverlay">
+        <div class="info-modal-overlay" id="tipsModalOverlay" role="dialog" aria-modal="true" aria-labelledby="tipsModalTitle">
             <div class="info-modal tips-modal-theme">
                 <div class="info-modal-header">
-                    <h2><span class="modal-icon">💡</span> Memory Tips</h2>
-                    <button class="info-modal-close" id="tipsModalClose">&times;</button>
+                    <h2 id="tipsModalTitle"><span class="modal-icon" aria-hidden="true">💡</span> Memory Tips</h2>
+                    <button class="info-modal-close" id="tipsModalClose" aria-label="Close dialog">&times;</button>
                 </div>
                 <div class="info-modal-content" id="tipsModalContent"></div>
             </div>
         </div>
 
         <!-- Password Types Modal -->
-        <div class="info-modal-overlay" id="typesModalOverlay">
+        <div class="info-modal-overlay" id="typesModalOverlay" role="dialog" aria-modal="true" aria-labelledby="typesModalTitle">
             <div class="info-modal types-modal-theme">
                 <div class="info-modal-header">
-                    <h2><span class="modal-icon">🔑</span> Password Types</h2>
-                    <button class="info-modal-close" id="typesModalClose">&times;</button>
+                    <h2 id="typesModalTitle"><span class="modal-icon" aria-hidden="true">🔑</span> Password Types</h2>
+                    <button class="info-modal-close" id="typesModalClose" aria-label="Close dialog">&times;</button>
                 </div>
                 <div class="info-modal-content" id="typesModalContent"></div>
             </div>
         </div>
 
         <!-- Security Modal -->
-        <div class="info-modal-overlay" id="securityModalOverlay">
+        <div class="info-modal-overlay" id="securityModalOverlay" role="dialog" aria-modal="true" aria-labelledby="securityModalTitle">
             <div class="info-modal security-modal-theme">
                 <div class="info-modal-header">
-                    <h2><span class="modal-icon">🛡️</span> Security Best Practices</h2>
-                    <button class="info-modal-close" id="securityModalClose">&times;</button>
+                    <h2 id="securityModalTitle"><span class="modal-icon" aria-hidden="true">🛡️</span> Security Best Practices</h2>
+                    <button class="info-modal-close" id="securityModalClose" aria-label="Close dialog">&times;</button>
                 </div>
                 <div class="info-modal-content" id="securityModalContent"></div>
             </div>
         </div>
+
+        <!-- SEO: Hidden content for search engines -->
+        <aside class="visually-hidden" aria-hidden="true">
+            <h2>About This Password Generator</h2>
+            <p>4gotagain.com is a free online password generator that helps you create strong, secure, and memorable passwords. Our tool runs entirely in your browser, ensuring your passwords are never sent over the internet or stored on any server.</p>
+            <h3>Features</h3>
+            <ul>
+                <li>Generate random passwords up to 128 characters</li>
+                <li>Human-memorable passwords using real words</li>
+                <li>Rhyming password patterns for easy recall</li>
+                <li>Include custom words in your passwords</li>
+                <li>Password strength analyzer</li>
+                <li>Avoid ambiguous characters option</li>
+                <li>Generate multiple passwords at once</li>
+                <li>One-click copy to clipboard</li>
+            </ul>
+        </aside>
     </div>
 
     <script src="script.js"></script>
