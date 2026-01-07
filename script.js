@@ -145,11 +145,9 @@ class PasswordGenerator {
         this.passwordList = document.getElementById('passwordList');
         this.passwordCountDisplay = document.getElementById('passwordCount');
         this.addPasswordBtn = document.getElementById('addPasswordBtn');
-        this.removePasswordBtn = document.getElementById('removePasswordBtn');
         this.lengthSlider = document.getElementById('length');
         this.lengthValue = document.getElementById('lengthValue');
         this.lengthLabelText = document.getElementById('lengthLabelText');
-        this.generateBtn = document.getElementById('generateBtn');
         this.strengthFill = document.getElementById('strengthFill');
         this.strengthText = document.getElementById('strengthText');
         this.successMessage = document.getElementById('successMessage');
@@ -182,8 +180,8 @@ class PasswordGenerator {
             },
             {
                 icon: '🏠',
-                title: 'Memory Palace (Method of Loci)',
-                description: 'Pick a place you know well (living room, commute). 1) Choose a fixed route with clear stops (door → couch → TV → fridge). 2) Place each item onto a specific location in order. 3) Recall by visualizing the same route and reading off each peg. In classic comparisons of mnemonic techniques, method of loci performs very well, especially for ordered recall. (Source: Psychnet)'
+                title: 'Pegging (Method of Loci)',
+                description: 'Pick a place you know well (living room, commute). 1) Choose a fixed route with clear stops (door → couch → TV → fridge). 2) Peg each password element by visualizing objects on top of, under, or hanging from each stop. 3) Recall by walking the route in your mind and reading off each peg. Method of loci performs very well for ordered recall. (Source: Psychnet)'
             },
             {
                 icon: '🧩',
@@ -265,26 +263,18 @@ class PasswordGenerator {
             }
         ];
 
-        // Modal elements - Tips
-        this.tipsModalOverlay = document.getElementById('tipsModalOverlay');
-        this.tipsModalContent = document.getElementById('tipsModalContent');
-        this.tipsBtn = document.getElementById('tipsBtn');
-        this.tipsModalClose = document.getElementById('tipsModalClose');
+        // Dropdown elements - Tips
+        this.tipsDropdownBtn = document.getElementById('tipsDropdownBtn');
+        this.tipsDropdownContent = document.getElementById('tipsDropdownContent');
+        this.tipsContentInner = document.getElementById('tipsContentInner');
 
-        // Modal elements - Types
-        this.typesModalOverlay = document.getElementById('typesModalOverlay');
-        this.typesModalContent = document.getElementById('typesModalContent');
-        this.typesBtn = document.getElementById('typesBtn');
-        this.typesModalClose = document.getElementById('typesModalClose');
+        // Dropdown elements - Security
+        this.securityDropdownBtn = document.getElementById('securityDropdownBtn');
+        this.securityDropdownContent = document.getElementById('securityDropdownContent');
+        this.securityContentInner = document.getElementById('securityContentInner');
 
-        // Modal elements - Security
-        this.securityModalOverlay = document.getElementById('securityModalOverlay');
-        this.securityModalContent = document.getElementById('securityModalContent');
-        this.securityBtn = document.getElementById('securityBtn');
-        this.securityModalClose = document.getElementById('securityModalClose');
-
-        this.updateRemoveButtonState();
-        this.populateAllModals();
+        this.updateAddButtonState();
+        this.populateDropdowns();
     }
 
     checkModeAndUpdateSlider() {
@@ -374,61 +364,37 @@ class PasswordGenerator {
             this.generateAllPasswords();
         });
 
-        // Generate button
-        this.generateBtn.addEventListener('click', () => {
-            this.generateAllPasswords();
-            this.animateButton();
-        });
-
-        // Add/Remove password buttons
+        // Add password button
         this.addPasswordBtn.addEventListener('click', () => this.addPasswordSlot());
-        this.removePasswordBtn.addEventListener('click', () => this.removePasswordSlot());
 
-        // Copy button delegation
+        // Password list event delegation for generate, copy, and remove buttons
         this.passwordList.addEventListener('click', (e) => {
+            const generateBtn = e.target.closest('.generate-row-btn');
             const copyBtn = e.target.closest('.copy-btn');
+            const removeBtn = e.target.closest('.remove-row-btn');
+
+            if (generateBtn) {
+                const passwordSlot = generateBtn.closest('.password-slot');
+                this.generatePasswordForSlot(passwordSlot);
+                this.updateStrengthFromFirst();
+            }
+
             if (copyBtn) {
                 const passwordSlot = copyBtn.closest('.password-slot');
                 const input = passwordSlot.querySelector('.password-output');
                 this.copyToClipboard(input, copyBtn);
             }
-        });
 
-        // Tips modal
-        this.tipsBtn.addEventListener('click', () => this.openModal('tips'));
-        this.tipsModalClose.addEventListener('click', () => this.closeModal('tips'));
-        this.tipsModalOverlay.addEventListener('click', (e) => {
-            if (e.target === this.tipsModalOverlay) {
-                this.closeModal('tips');
+            if (removeBtn) {
+                this.removePasswordSlot(removeBtn.closest('.password-slot'));
             }
         });
 
-        // Types modal
-        this.typesBtn.addEventListener('click', () => this.openModal('types'));
-        this.typesModalClose.addEventListener('click', () => this.closeModal('types'));
-        this.typesModalOverlay.addEventListener('click', (e) => {
-            if (e.target === this.typesModalOverlay) {
-                this.closeModal('types');
-            }
-        });
+        // Tips dropdown toggle
+        this.tipsDropdownBtn.addEventListener('click', () => this.toggleDropdown('tips'));
 
-        // Security modal
-        this.securityBtn.addEventListener('click', () => this.openModal('security'));
-        this.securityModalClose.addEventListener('click', () => this.closeModal('security'));
-        this.securityModalOverlay.addEventListener('click', (e) => {
-            if (e.target === this.securityModalOverlay) {
-                this.closeModal('security');
-            }
-        });
-
-        // Close any modal on Escape key
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                this.closeModal('tips');
-                this.closeModal('types');
-                this.closeModal('security');
-            }
-        });
+        // Security dropdown toggle
+        this.securityDropdownBtn.addEventListener('click', () => this.toggleDropdown('security'));
     }
 
     addPasswordSlot() {
@@ -444,9 +410,15 @@ class PasswordGenerator {
             <div class="password-display">
                 <input type="text" class="password-output" readonly placeholder="Your password will appear here...">
                 <div class="password-actions">
+                    <button class="generate-row-btn" title="Generate this password" aria-label="Generate this password">
+                        <span class="btn-text">Generate</span>
+                    </button>
                     <button class="copy-btn" title="Copy to clipboard">
                         <span class="copy-icon">📋</span>
                         <span class="copy-text">Copy</span>
+                    </button>
+                    <button class="remove-row-btn" title="Remove this password" aria-label="Remove this password">
+                        <span class="remove-icon">×</span>
                     </button>
                 </div>
             </div>
@@ -454,22 +426,27 @@ class PasswordGenerator {
 
         this.passwordList.appendChild(newSlot);
         this.generatePasswordForSlot(newSlot);
-        this.updateRemoveButtonState();
+        this.updateAddButtonState();
     }
 
-    removePasswordSlot() {
+    removePasswordSlot(slotToRemove = null) {
         if (this.passwordCount <= 1) return;
 
-        const slots = this.passwordList.querySelectorAll('.password-slot');
-        slots[slots.length - 1].remove();
+        if (slotToRemove) {
+            slotToRemove.remove();
+        } else {
+            // Fallback: remove last slot
+            const slots = this.passwordList.querySelectorAll('.password-slot');
+            slots[slots.length - 1].remove();
+        }
+
         this.passwordCount--;
         this.passwordCountDisplay.textContent = this.passwordCount;
-        this.updateRemoveButtonState();
+        this.updateAddButtonState();
         this.updateStrengthFromFirst();
     }
 
-    updateRemoveButtonState() {
-        this.removePasswordBtn.disabled = this.passwordCount <= 1;
+    updateAddButtonState() {
         this.addPasswordBtn.disabled = this.passwordCount >= this.maxPasswords;
     }
 
@@ -797,48 +774,75 @@ class PasswordGenerator {
     }
 
     calculateStrength(password) {
+        if (!password || password.length === 0) return 0;
+
+        // Check if we're in word-based mode
+        const isWordMode = this.options.humanMemorable.checked ||
+            this.options.rhymingPassword.checked ||
+            this.options.objectsOnly.checked;
+
         let score = 0;
 
-        // Length score (0-40 points)
-        score += Math.min(password.length * 2.5, 40);
+        if (isWordMode) {
+            // Word-based entropy calculation
+            // Each word from our lists has ~10-12 bits of entropy (1000+ words)
+            // We estimate ~11 bits per word for our word lists
+            const words = password.split(/[-_.:/|~=!@#$%^&*+]/).filter(word => word.length > 1);
+            const wordCount = words.length;
 
-        // Character variety score (0-60 points)
-        const hasUpper = /[A-Z]/.test(password);
-        const hasLower = /[a-z]/.test(password);
-        const hasNumbers = /[0-9]/.test(password);
-        const hasSymbols = /[^A-Za-z0-9]/.test(password);
+            // Base entropy from word count (~11 bits per word)
+            // 3 words = 33 bits, 4 words = 44 bits, 5+ words = 55+ bits
+            const wordEntropy = wordCount * 11;
 
-        if (hasUpper) score += 15;
-        if (hasLower) score += 15;
-        if (hasNumbers) score += 15;
-        if (hasSymbols) score += 15;
+            // Convert entropy to score (0-100 scale)
+            // 40 bits = decent (60 score), 55 bits = strong (80), 70+ bits = very strong (100)
+            score = Math.min((wordEntropy / 70) * 100, 85);
 
-        // Bonus for using all character types
-        const typesUsed = [hasUpper, hasLower, hasNumbers, hasSymbols].filter(Boolean).length;
-        if (typesUsed === 4) score += 10;
+            // Bonus for character variety (adds unpredictability)
+            const hasUpper = /[A-Z]/.test(password);
+            const hasNumbers = /[0-9]/.test(password);
+            const hasSymbols = /[^A-Za-z0-9\-_.:\/|~=]/.test(password);
 
-        // Special bonus for human-memorable or rhyming passwords
-        if (this.options.humanMemorable.checked || this.options.rhymingPassword.checked) {
-            // Memorable/Rhyming passwords get a bonus for being easier to remember
-            score += 10;
+            if (hasUpper) score += 5;
+            if (hasNumbers) score += 5;
+            if (hasSymbols) score += 5;
 
-            // Bonus for word-based structure
-            const wordCount = password.split(/[-_.:/|~=!@#$%^&*+]/).filter(word => word.length > 2).length;
-            if (wordCount >= 3) score += 10;
+        } else {
+            // Traditional random password entropy calculation
+            // Entropy = length * log2(charset_size)
+            let charsetSize = 0;
+
+            const hasUpper = /[A-Z]/.test(password);
+            const hasLower = /[a-z]/.test(password);
+            const hasNumbers = /[0-9]/.test(password);
+            const hasSymbols = /[^A-Za-z0-9]/.test(password);
+
+            if (hasUpper) charsetSize += 26;
+            if (hasLower) charsetSize += 26;
+            if (hasNumbers) charsetSize += 10;
+            if (hasSymbols) charsetSize += 32;
+
+            // Calculate entropy bits
+            const entropyBits = charsetSize > 0 ? password.length * Math.log2(charsetSize) : 0;
+
+            // Convert to score (0-100)
+            // 40 bits = weak (40), 60 bits = medium (60), 80 bits = strong (80), 100+ = very strong (100)
+            score = Math.min(entropyBits, 100);
         }
 
-        return Math.min(score, 100);
+        return Math.min(Math.round(score), 100);
     }
 
     updateStrength(score) {
+        // Ensure the bar fills completely when score is 100
         this.strengthFill.style.width = score + '%';
 
         let text, color;
-        if (score < 30) {
+        if (score < 40) {
             text = 'Weak';
             color = '#ff0000';
         } else if (score < 60) {
-            text = 'Medium';
+            text = 'Fair';
             color = '#ff8800';
         } else if (score < 80) {
             text = 'Strong';
@@ -956,34 +960,34 @@ class PasswordGenerator {
         }
     }
 
-    // Open a modal by type
-    openModal(type) {
-        const overlays = {
-            tips: this.tipsModalOverlay,
-            types: this.typesModalOverlay,
-            security: this.securityModalOverlay
-        };
-        if (overlays[type]) {
-            overlays[type].classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-    }
-
-    // Close a modal by type
-    closeModal(type) {
-        const overlays = {
-            tips: this.tipsModalOverlay,
-            types: this.typesModalOverlay,
-            security: this.securityModalOverlay
-        };
-        if (overlays[type]) {
-            overlays[type].classList.remove('active');
-            // Only restore scrolling if no modals are open
-            if (!this.tipsModalOverlay.classList.contains('active') &&
-                !this.typesModalOverlay.classList.contains('active') &&
-                !this.securityModalOverlay.classList.contains('active')) {
-                document.body.style.overflow = '';
+    // Toggle dropdown by type
+    toggleDropdown(type) {
+        const dropdowns = {
+            tips: {
+                btn: this.tipsDropdownBtn,
+                content: this.tipsDropdownContent
+            },
+            security: {
+                btn: this.securityDropdownBtn,
+                content: this.securityDropdownContent
             }
+        };
+
+        const dropdown = dropdowns[type];
+        if (dropdown) {
+            const isExpanded = dropdown.btn.getAttribute('aria-expanded') === 'true';
+
+            // Close other dropdown first
+            Object.keys(dropdowns).forEach(key => {
+                if (key !== type) {
+                    dropdowns[key].btn.setAttribute('aria-expanded', 'false');
+                    dropdowns[key].content.hidden = true;
+                }
+            });
+
+            // Toggle current dropdown
+            dropdown.btn.setAttribute('aria-expanded', !isExpanded);
+            dropdown.content.hidden = isExpanded;
         }
     }
 
@@ -1000,25 +1004,18 @@ class PasswordGenerator {
         `;
     }
 
-    // Populate all modals
-    populateAllModals() {
-        // Memory Tips Modal
-        this.tipsModalContent.innerHTML = `
-            <div class="tips-grid">
+    // Populate dropdown content
+    populateDropdowns() {
+        // Memory Tips
+        this.tipsContentInner.innerHTML = `
+            <div class="tips-list">
                 ${this.memoryTechniques.map(tip => this.renderTipCard(tip)).join('')}
             </div>
         `;
 
-        // Password Types Modal
-        this.typesModalContent.innerHTML = `
-            <div class="tips-grid">
-                ${this.passwordTypeTips.map(tip => this.renderTipCard(tip)).join('')}
-            </div>
-        `;
-
-        // Security Modal
-        this.securityModalContent.innerHTML = `
-            <div class="tips-grid">
+        // Security
+        this.securityContentInner.innerHTML = `
+            <div class="tips-list">
                 ${this.securityTips.map(tip => this.renderTipCard(tip)).join('')}
             </div>
         `;

@@ -158,6 +158,122 @@ header {
 }
 
 /* ==========================================================================
+   Info Dropdowns (Top Section)
+   ========================================================================== */
+
+.info-dropdowns {
+    margin-bottom: 1.5rem;
+}
+
+.dropdown-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.dropdown-toggle {
+    flex: 1;
+    padding: 0.875rem 1rem;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-md);
+    font-family: inherit;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-base);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.dropdown-toggle .dropdown-icon {
+    font-size: 1.1rem;
+}
+
+.dropdown-toggle .dropdown-arrow {
+    font-size: 0.6rem;
+    margin-left: auto;
+    transition: transform var(--transition-base);
+}
+
+.dropdown-toggle[aria-expanded="true"] .dropdown-arrow {
+    transform: rotate(180deg);
+}
+
+.tips-toggle {
+    color: var(--accent);
+    border-color: rgba(226, 168, 75, 0.3);
+}
+
+.tips-toggle:hover,
+.tips-toggle[aria-expanded="true"] {
+    background: var(--accent-soft);
+    border-color: var(--accent);
+}
+
+.security-toggle {
+    color: var(--accent-cool);
+    border-color: rgba(110, 181, 168, 0.3);
+}
+
+.security-toggle:hover,
+.security-toggle[aria-expanded="true"] {
+    background: var(--accent-cool-soft);
+    border-color: var(--accent-cool);
+}
+
+.dropdown-content {
+    margin-top: 0.75rem;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    animation: slideDown 0.25s ease-out;
+}
+
+.dropdown-content[hidden] {
+    display: none;
+}
+
+.dropdown-content-inner {
+    padding: 1rem;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.tips-dropdown {
+    border-color: rgba(226, 168, 75, 0.3);
+}
+
+.security-dropdown {
+    border-color: rgba(110, 181, 168, 0.3);
+}
+
+/* Dropdown tip cards - more compact than modal version */
+.dropdown-content .memory-tip-card {
+    background: var(--bg-base);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    padding: 0.75rem;
+    margin-bottom: 0.5rem;
+}
+
+.dropdown-content .memory-tip-card:last-child {
+    margin-bottom: 0;
+}
+
+.dropdown-content .memory-tip-title {
+    font-size: 0.8125rem;
+    margin-bottom: 0.25rem;
+}
+
+.dropdown-content .memory-tip-description {
+    font-size: 0.75rem;
+    line-height: 1.4;
+}
+
+/* ==========================================================================
    Password Section
    ========================================================================== */
 
@@ -277,27 +393,46 @@ header {
     flex-shrink: 0;
 }
 
-.generate-btn {
-    padding: 1rem 1.5rem;
-    background: var(--accent);
-    border: none;
+/* Password Section Actions */
+.password-section-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.add-row-btn {
+    flex: 1;
+    padding: 1rem 1.25rem;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-default);
     border-radius: var(--radius-md);
-    color: var(--bg-deep);
+    color: var(--text-secondary);
     font-family: inherit;
     font-size: 0.875rem;
-    font-weight: 600;
+    font-weight: 500;
     cursor: pointer;
     transition: all var(--transition-base);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
 }
 
-.generate-btn:hover {
-    filter: brightness(1.1);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 16px rgba(226, 168, 75, 0.25);
+.add-row-btn .add-icon {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--accent);
 }
 
-.generate-btn:active {
-    transform: translateY(0);
+.add-row-btn:hover {
+    background: var(--accent-soft);
+    border-color: var(--accent);
+    color: var(--text-primary);
+}
+
+.add-row-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
 }
 
 .copy-btn,
@@ -328,6 +463,54 @@ header {
     background: var(--accent-cool);
     border-color: var(--accent-cool);
     color: var(--bg-deep);
+}
+
+/* Per-row action buttons */
+.generate-row-btn {
+    padding: 0.75rem 1rem;
+    background: var(--accent);
+    border: none;
+    border-radius: var(--radius-md);
+    color: var(--bg-deep);
+    font-family: inherit;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-base);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.generate-row-btn:hover {
+    filter: brightness(1.1);
+    box-shadow: 0 2px 8px rgba(226, 168, 75, 0.25);
+}
+
+.remove-row-btn {
+    padding: 0.75rem 1rem;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-md);
+    color: var(--text-secondary);
+    font-size: 1.25rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all var(--transition-base);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 48px;
+}
+
+.remove-row-btn:hover {
+    background: rgba(224, 82, 82, 0.15);
+    border-color: #e05252;
+    color: #e05252;
+}
+
+.remove-icon {
+    line-height: 1;
 }
 
 .tips-btn.active {
@@ -1031,6 +1214,7 @@ header {
         opacity: 0;
         transform: translateY(-8px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -1042,6 +1226,7 @@ header {
         opacity: 0;
         transform: translateY(-8px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -1123,6 +1308,7 @@ input:focus-visible {
    ========================================================================== */
 
 @media (prefers-reduced-motion: reduce) {
+
     *,
     *::before,
     *::after {
