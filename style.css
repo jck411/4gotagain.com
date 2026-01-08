@@ -734,8 +734,72 @@ header {
     color: var(--text-secondary);
 }
 
-.word-count-control .password-controls {
+.word-count-control .password-controls,
+.number-count-control .password-controls,
+.symbol-count-control .password-controls {
     margin-bottom: 0;
+}
+
+/* Number and Symbol count control layout */
+.number-count-control,
+.symbol-count-control {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.number-count-control .password-controls,
+.symbol-count-control .password-controls {
+    flex: 1;
+    min-width: fit-content;
+}
+
+/* Position toggle - styled consistently for numbers and symbols */
+.number-position-toggle,
+.symbol-position-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    background: var(--bg-elevated);
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-default);
+}
+
+.number-position-toggle .position-btn,
+.symbol-position-toggle .position-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-family: inherit;
+    font-size: 0.75rem;
+    font-weight: 500;
+    padding: 0.35rem 0.5rem;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    text-transform: lowercase;
+}
+
+.number-position-toggle .position-btn:hover,
+.symbol-position-toggle .position-btn:hover {
+    color: var(--text-secondary);
+    background: var(--bg-hover);
+}
+
+.number-position-toggle .position-btn.active,
+.symbol-position-toggle .position-btn.active {
+    color: var(--accent);
+    background: var(--accent-soft);
+}
+
+.number-position-toggle .position-separator,
+.symbol-position-toggle .position-separator {
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    opacity: 0.5;
+    user-select: none;
 }
 
 .control-header {
@@ -754,7 +818,8 @@ header {
 #length {
     --slider-progress: 0%;
     width: 100%;
-    height: 28px; /* larger hit area without visual noise */
+    height: 28px;
+    /* larger hit area without visual noise */
     background: transparent;
     border-radius: 999px;
     outline: none;
@@ -767,13 +832,11 @@ header {
     height: 10px;
     border-radius: 999px;
     border: 1px solid var(--border-subtle);
-    background: linear-gradient(
-        to right,
-        var(--accent) 0%,
-        var(--accent) var(--slider-progress),
-        var(--bg-elevated) var(--slider-progress),
-        var(--bg-elevated) 100%
-    );
+    background: linear-gradient(to right,
+            var(--accent) 0%,
+            var(--accent) var(--slider-progress),
+            var(--bg-elevated) var(--slider-progress),
+            var(--bg-elevated) 100%);
     box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.35);
 }
 
@@ -791,7 +854,8 @@ header {
     transition: all var(--transition-fast);
     border: 2px solid rgba(12, 12, 14, 0.7);
     box-shadow: 0 2px 10px rgba(226, 168, 75, 0.35);
-    margin-top: -6px; /* center thumb on 10px track */
+    margin-top: -6px;
+    /* center thumb on 10px track */
 }
 
 #length::-webkit-slider-thumb:hover {

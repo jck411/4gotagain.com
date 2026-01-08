@@ -242,6 +242,44 @@
                                 aria-label="Increase word count">+</button>
                         </div>
                     </div>
+                    <div class="control-group number-count-control" id="numberCountControl">
+                        <div class="password-controls" role="group" aria-label="Number count">
+                            <button type="button" class="pw-count-btn" id="numberCountDown"
+                                aria-label="Decrease number count">-</button>
+                            <span class="password-count-label">Number count: <span id="numberCountValue">2</span></span>
+                            <button type="button" class="pw-count-btn" id="numberCountUp"
+                                aria-label="Increase number count">+</button>
+                        </div>
+                        <div class="number-position-toggle" role="group" aria-label="Number position">
+                            <button type="button" id="numberPositionStart" class="position-btn active"
+                                title="Place numbers at start" aria-pressed="true">start</button>
+                            <span class="position-separator">|</span>
+                            <button type="button" id="numberPositionEnd" class="position-btn"
+                                title="Place numbers at end" aria-pressed="false">end</button>
+                            <span class="position-separator">|</span>
+                            <button type="button" id="numberPositionRandom" class="position-btn"
+                                title="Randomize number positions" aria-pressed="false">random</button>
+                        </div>
+                    </div>
+                    <div class="control-group symbol-count-control" id="symbolCountControl" hidden>
+                        <div class="password-controls" role="group" aria-label="Symbol count">
+                            <button type="button" class="pw-count-btn" id="symbolCountDown"
+                                aria-label="Decrease symbol count">-</button>
+                            <span class="password-count-label">Symbol count: <span id="symbolCountValue">2</span></span>
+                            <button type="button" class="pw-count-btn" id="symbolCountUp"
+                                aria-label="Increase symbol count">+</button>
+                        </div>
+                        <div class="symbol-position-toggle" role="group" aria-label="Symbol position">
+                            <button type="button" id="symbolPositionStart" class="position-btn active"
+                                title="Place symbols at start" aria-pressed="true">start</button>
+                            <span class="position-separator">|</span>
+                            <button type="button" id="symbolPositionEnd" class="position-btn"
+                                title="Place symbols at end" aria-pressed="false">end</button>
+                            <span class="position-separator">|</span>
+                            <button type="button" id="symbolPositionRandom" class="position-btn"
+                                title="Randomize symbol positions" aria-pressed="false">random</button>
+                        </div>
+                    </div>
 
                     <fieldset class="options">
                         <legend class="visually-hidden">Character Options</legend>

@@ -9,6 +9,18 @@ export const WORD_COUNT_CONFIG = {
     default: 1
 };
 
+export const NUMBER_COUNT_CONFIG = {
+    min: 0,
+    max: 8,
+    default: 2
+};
+
+export const SYMBOL_COUNT_CONFIG = {
+    min: 0,
+    max: 8,
+    default: 2
+};
+
 export const DEFAULT_LIMITS = {
     maxPasswords: 10
 };

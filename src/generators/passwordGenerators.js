@@ -79,6 +79,64 @@ const ensureAtLeastOneUppercase = (words, useUppercase, uppercaseStyle = 'first'
     return words;
 };
 
+/**
+ * Generates a string of random digits
+ * @param {number} count - Number of digits to generate
+ * @returns {string} Random digits string
+ */
+const generateNumberString = (count) => {
+    if (!count || count <= 0) return '';
+    let result = '';
+    for (let i = 0; i < count; i++) {
+        result += randomNumber(0, 9).toString();
+    }
+    return result;
+};
+
+/**
+ * Applies characters (numbers or symbols) to password based on position preference
+ * @param {string} password - The base password
+ * @param {string} chars - The character string to add
+ * @param {string} position - 'start', 'end', or 'random'
+ * @param {string} separator - Optional separator
+ * @returns {string} Password with characters applied
+ */
+const applyCharsToPassword = (password, chars, position, separator = '') => {
+    if (!chars) return password;
+
+    if (position === 'start') {
+        return `${chars}${separator}${password}`;
+    } else if (position === 'end') {
+        return `${password}${separator}${chars}`;
+    } else {
+        // Random: insert characters at random positions within the password
+        const passwordChars = password.split('');
+        const charsToInsert = chars.split('');
+
+        // Insert each character at a random position
+        charsToInsert.forEach((char) => {
+            const insertPos = randomIndex(passwordChars.length + 1);
+            passwordChars.splice(insertPos, 0, char);
+        });
+
+        return passwordChars.join('');
+    }
+};
+
+/**
+ * Generates a string of random symbols
+ * @param {number} count - Number of symbols to generate
+ * @returns {string} Random symbols string
+ */
+const generateSymbolString = (count) => {
+    if (!count || count <= 0) return '';
+    let result = '';
+    for (let i = 0; i < count; i++) {
+        result += randomSymbol();
+    }
+    return result;
+};
+
 const flattenLists = (lists) => lists.reduce((accumulator, list) => accumulator.concat(list), []);
 
 const getWordCandidates = (list, targetLength, minCount = 1) => {
@@ -176,7 +234,11 @@ export const generateMemorablePassword = ({
     useUppercase,
     useSeparators,
     uppercaseStyle = 'first',
-    leetSpeak = false
+    leetSpeak = false,
+    numberCount = 2,
+    numberPosition = 'end',
+    symbolCount = 2,
+    symbolPosition = 'end'
 }) => {
     const words = [];
 
@@ -215,17 +277,14 @@ export const generateMemorablePassword = ({
     const separator = useSeparators ? randomSeparator() : '';
     let password = words.join(separator);
 
-    if (includeNumbers) {
-        password += separator + randomNumber(1, 99);
+    if (includeNumbers && numberCount > 0) {
+        const numbers = generateNumberString(numberCount);
+        password = applyCharsToPassword(password, numbers, numberPosition, separator);
     }
 
-    if (includeSymbols) {
-        const symbol = randomSymbol();
-        if (wordCount <= 1) {
-            password = symbol + password + symbol;
-        } else {
-            password += symbol + getRandomWord(WORD_LISTS.adjectives, useUppercase, wordLength, uppercaseStyle);
-        }
+    if (includeSymbols && symbolCount > 0) {
+        const symbols = generateSymbolString(symbolCount);
+        password = applyCharsToPassword(password, symbols, symbolPosition, separator);
     }
 
     if (leetSpeak) {
@@ -243,7 +302,11 @@ export const generateRhymingPassword = ({
     useUppercase,
     useSeparators,
     uppercaseStyle = 'first',
-    leetSpeak = false
+    leetSpeak = false,
+    numberCount = 2,
+    numberPosition = 'end',
+    symbolCount = 2,
+    symbolPosition = 'end'
 }) => {
     let selectedWords = [];
 
@@ -264,13 +327,14 @@ export const generateRhymingPassword = ({
     const separator = useSeparators ? randomSeparator() : '';
     let password = selectedWords.join(separator);
 
-    if (includeNumbers) {
-        password += separator + randomNumber(1, 99);
+    if (includeNumbers && numberCount > 0) {
+        const numbers = generateNumberString(numberCount);
+        password = applyCharsToPassword(password, numbers, numberPosition, separator);
     }
 
-    if (includeSymbols) {
-        const symbol = randomSymbol();
-        password = symbol + password + symbol;
+    if (includeSymbols && symbolCount > 0) {
+        const symbols = generateSymbolString(symbolCount);
+        password = applyCharsToPassword(password, symbols, symbolPosition, separator);
     }
 
     if (leetSpeak) {
@@ -288,7 +352,11 @@ export const generateObjectsOnlyPassword = ({
     useUppercase,
     useSeparators,
     uppercaseStyle = 'first',
-    leetSpeak = false
+    leetSpeak = false,
+    numberCount = 2,
+    numberPosition = 'end',
+    symbolCount = 2,
+    symbolPosition = 'end'
 }) => {
     const words = [];
     for (let i = 0; i < wordCount; i++) {
@@ -300,13 +368,14 @@ export const generateObjectsOnlyPassword = ({
     const separator = useSeparators ? randomSeparator() : '';
     let password = words.join(separator);
 
-    if (includeNumbers) {
-        password += separator + randomNumber(1, 99);
+    if (includeNumbers && numberCount > 0) {
+        const numbers = generateNumberString(numberCount);
+        password = applyCharsToPassword(password, numbers, numberPosition, separator);
     }
 
-    if (includeSymbols) {
-        const symbol = randomSymbol();
-        password = symbol + password + symbol;
+    if (includeSymbols && symbolCount > 0) {
+        const symbols = generateSymbolString(symbolCount);
+        password = applyCharsToPassword(password, symbols, symbolPosition, separator);
     }
 
     if (leetSpeak) {
@@ -324,7 +393,11 @@ export const generateRhymingObjectsPassword = ({
     useUppercase,
     useSeparators,
     uppercaseStyle = 'first',
-    leetSpeak = false
+    leetSpeak = false,
+    numberCount = 2,
+    numberPosition = 'end',
+    symbolCount = 2,
+    symbolPosition = 'end'
 }) => {
     let selectedWords = [];
 
@@ -345,13 +418,14 @@ export const generateRhymingObjectsPassword = ({
     const separator = useSeparators ? randomSeparator() : '';
     let password = selectedWords.join(separator);
 
-    if (includeNumbers) {
-        password += separator + randomNumber(1, 99);
+    if (includeNumbers && numberCount > 0) {
+        const numbers = generateNumberString(numberCount);
+        password = applyCharsToPassword(password, numbers, numberPosition, separator);
     }
 
-    if (includeSymbols) {
-        const symbol = randomSymbol();
-        password = symbol + password + symbol;
+    if (includeSymbols && symbolCount > 0) {
+        const symbols = generateSymbolString(symbolCount);
+        password = applyCharsToPassword(password, symbols, symbolPosition, separator);
     }
 
     if (leetSpeak) {

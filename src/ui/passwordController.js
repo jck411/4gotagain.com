@@ -1,4 +1,4 @@
-import { MODE_CONFIGS, DEFAULT_LIMITS, WORD_COUNT_CONFIG } from '../config/modeConfigs.js';
+import { MODE_CONFIGS, DEFAULT_LIMITS, WORD_COUNT_CONFIG, NUMBER_COUNT_CONFIG, SYMBOL_COUNT_CONFIG } from '../config/modeConfigs.js';
 import { memoryTechniques, securityTips, passwordTypeTips } from '../data/tips.js';
 import {
     generateRandomPassword,
@@ -18,6 +18,10 @@ class PasswordController {
         this.customWordPosition = 'start';
         this.lastModeValues = {};
         this.wordCount = WORD_COUNT_CONFIG.default;
+        this.numberCount = NUMBER_COUNT_CONFIG.default;
+        this.numberPosition = 'start'; // 'start', 'end', or 'random'
+        this.symbolCount = SYMBOL_COUNT_CONFIG.default;
+        this.symbolPosition = 'start'; // 'start', 'end', or 'random'
 
         this.initializeElements();
         this.setupEventListeners();
@@ -37,6 +41,24 @@ class PasswordController {
         this.wordCountValue = document.getElementById('wordCountValue');
         this.wordCountDown = document.getElementById('wordCountDown');
         this.wordCountUp = document.getElementById('wordCountUp');
+
+        // Number count elements
+        this.numberCountControl = document.getElementById('numberCountControl');
+        this.numberCountValue = document.getElementById('numberCountValue');
+        this.numberCountDown = document.getElementById('numberCountDown');
+        this.numberCountUp = document.getElementById('numberCountUp');
+        this.numberPositionStart = document.getElementById('numberPositionStart');
+        this.numberPositionEnd = document.getElementById('numberPositionEnd');
+        this.numberPositionRandom = document.getElementById('numberPositionRandom');
+
+        // Symbol count elements
+        this.symbolCountControl = document.getElementById('symbolCountControl');
+        this.symbolCountValue = document.getElementById('symbolCountValue');
+        this.symbolCountDown = document.getElementById('symbolCountDown');
+        this.symbolCountUp = document.getElementById('symbolCountUp');
+        this.symbolPositionStart = document.getElementById('symbolPositionStart');
+        this.symbolPositionEnd = document.getElementById('symbolPositionEnd');
+        this.symbolPositionRandom = document.getElementById('symbolPositionRandom');
 
         this.options = {
             uppercase: document.getElementById('uppercase'),
@@ -83,7 +105,11 @@ class PasswordController {
         };
 
         this.updateWordCountControls();
+        this.updateNumberCountControls();
+        this.updateSymbolCountControls();
         this.updateWordCountVisibility();
+        this.updateNumberCountVisibility();
+        this.updateSymbolCountVisibility();
         this.updateAddButtonState();
         this.populateModals();
         this.setupModalListeners();
@@ -102,6 +128,32 @@ class PasswordController {
             this.wordCountUp.addEventListener('click', () => this.adjustWordCount(1));
         }
 
+        // Number count controls
+        if (this.numberCountDown && this.numberCountUp) {
+            this.numberCountDown.addEventListener('click', () => this.adjustNumberCount(-1));
+            this.numberCountUp.addEventListener('click', () => this.adjustNumberCount(1));
+        }
+
+        // Number position controls
+        if (this.numberPositionStart && this.numberPositionEnd && this.numberPositionRandom) {
+            this.numberPositionStart.addEventListener('click', () => this.setNumberPosition('start'));
+            this.numberPositionEnd.addEventListener('click', () => this.setNumberPosition('end'));
+            this.numberPositionRandom.addEventListener('click', () => this.setNumberPosition('random'));
+        }
+
+        // Symbol count controls
+        if (this.symbolCountDown && this.symbolCountUp) {
+            this.symbolCountDown.addEventListener('click', () => this.adjustSymbolCount(-1));
+            this.symbolCountUp.addEventListener('click', () => this.adjustSymbolCount(1));
+        }
+
+        // Symbol position controls
+        if (this.symbolPositionStart && this.symbolPositionEnd && this.symbolPositionRandom) {
+            this.symbolPositionStart.addEventListener('click', () => this.setSymbolPosition('start'));
+            this.symbolPositionEnd.addEventListener('click', () => this.setSymbolPosition('end'));
+            this.symbolPositionRandom.addEventListener('click', () => this.setSymbolPosition('random'));
+        }
+
         Object.entries(this.options).forEach(([key, option]) => {
             option.addEventListener('change', () => {
                 if (key === 'humanMemorable' && option.checked) {
@@ -112,6 +164,8 @@ class PasswordController {
                 }
 
                 this.checkModeAndUpdateSlider();
+                this.updateNumberCountVisibility();
+                this.updateSymbolCountVisibility();
                 this.generateAllPasswords();
             });
         });
@@ -279,9 +333,103 @@ class PasswordController {
         this.generateAllPasswords();
     }
 
+    updateNumberCountControls() {
+        if (this.numberCountValue) {
+            this.numberCountValue.textContent = this.numberCount;
+        }
+        if (this.numberCountDown) {
+            this.numberCountDown.disabled = this.numberCount <= NUMBER_COUNT_CONFIG.min;
+        }
+        if (this.numberCountUp) {
+            this.numberCountUp.disabled = this.numberCount >= NUMBER_COUNT_CONFIG.max;
+        }
+    }
+
+    adjustNumberCount(delta) {
+        const nextValue = Math.max(
+            NUMBER_COUNT_CONFIG.min,
+            Math.min(NUMBER_COUNT_CONFIG.max, this.numberCount + delta)
+        );
+
+        if (nextValue === this.numberCount) return;
+
+        this.numberCount = nextValue;
+        this.updateNumberCountControls();
+        this.generateAllPasswords();
+    }
+
+    setNumberPosition(position) {
+        this.numberPosition = position;
+
+        // Update button active states
+        this.numberPositionStart.classList.toggle('active', position === 'start');
+        this.numberPositionStart.setAttribute('aria-pressed', position === 'start');
+
+        this.numberPositionEnd.classList.toggle('active', position === 'end');
+        this.numberPositionEnd.setAttribute('aria-pressed', position === 'end');
+
+        this.numberPositionRandom.classList.toggle('active', position === 'random');
+        this.numberPositionRandom.setAttribute('aria-pressed', position === 'random');
+
+        this.generateAllPasswords();
+    }
+
+    updateSymbolCountControls() {
+        if (this.symbolCountValue) {
+            this.symbolCountValue.textContent = this.symbolCount;
+        }
+        if (this.symbolCountDown) {
+            this.symbolCountDown.disabled = this.symbolCount <= SYMBOL_COUNT_CONFIG.min;
+        }
+        if (this.symbolCountUp) {
+            this.symbolCountUp.disabled = this.symbolCount >= SYMBOL_COUNT_CONFIG.max;
+        }
+    }
+
+    adjustSymbolCount(delta) {
+        const nextValue = Math.max(
+            SYMBOL_COUNT_CONFIG.min,
+            Math.min(SYMBOL_COUNT_CONFIG.max, this.symbolCount + delta)
+        );
+
+        if (nextValue === this.symbolCount) return;
+
+        this.symbolCount = nextValue;
+        this.updateSymbolCountControls();
+        this.generateAllPasswords();
+    }
+
+    setSymbolPosition(position) {
+        this.symbolPosition = position;
+
+        // Update button active states
+        this.symbolPositionStart.classList.toggle('active', position === 'start');
+        this.symbolPositionStart.setAttribute('aria-pressed', position === 'start');
+
+        this.symbolPositionEnd.classList.toggle('active', position === 'end');
+        this.symbolPositionEnd.setAttribute('aria-pressed', position === 'end');
+
+        this.symbolPositionRandom.classList.toggle('active', position === 'random');
+        this.symbolPositionRandom.setAttribute('aria-pressed', position === 'random');
+
+        this.generateAllPasswords();
+    }
+
     updateWordCountVisibility() {
         if (this.wordCountControl) {
             this.wordCountControl.hidden = !this.isWordMode();
+        }
+    }
+
+    updateNumberCountVisibility() {
+        if (this.numberCountControl) {
+            this.numberCountControl.hidden = !this.options.numbers.checked;
+        }
+    }
+
+    updateSymbolCountVisibility() {
+        if (this.symbolCountControl) {
+            this.symbolCountControl.hidden = !this.options.symbols.checked;
         }
     }
 
@@ -405,7 +553,11 @@ class PasswordController {
             useUppercase: this.options.uppercase.checked,
             useSeparators,
             uppercaseStyle,
-            leetSpeak: this.options.leetSpeak.checked
+            leetSpeak: this.options.leetSpeak.checked,
+            numberCount: this.numberCount,
+            numberPosition: this.numberPosition,
+            symbolCount: this.symbolCount,
+            symbolPosition: this.symbolPosition
         };
 
         let password = '';
