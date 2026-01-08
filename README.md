@@ -17,7 +17,7 @@ A memory-first password generator focused on helping you create passwords you ca
 ## 🚀 Quick Start
 
 1. **Clone or download** this repository
-2. **Open `index.html`** in any modern web browser
+2. **Open `index.html`** in any modern web browser (if your browser blocks ES modules over `file://`, run a quick server with `python -m http.server 8000`)
 3. **Start generating** memorable, secure passwords
 
 No build tools, no dependencies, no server required.
@@ -79,7 +79,14 @@ When enabled, the generator creates passwords using curated word lists:
 4gotagain/
 ├── index.html          # Main HTML structure
 ├── style.css           # Styling
-├── script.js           # JavaScript functionality
+├── src/
+│   ├── main.js                     # Entry point that boots the UI + easter eggs
+│   ├── config/modeConfigs.js       # Slider limits and other defaults
+│   ├── data/wordLists.js           # Word lists + rhyming families
+│   ├── data/tips.js                # Memory/security tip copy
+│   ├── generators/passwordGenerators.js # Pure generation functions
+│   ├── ui/passwordController.js    # DOM wiring and event handling
+│   └── utils/{random,strength}.js  # Small utility helpers
 ├── README.md           # This file
 └── LICENSE             # MIT License
 ```
@@ -87,8 +94,16 @@ When enabled, the generator creates passwords using curated word lists:
 ## 🎨 Customization
 
 - **Colors & spacing**: Edit the styles in `style.css`
-- **Word lists**: Update the lists at the top of `script.js`
-- **Strength scoring**: Adjust `calculateStrength()` in `script.js`
+- **Word lists**: Update the exports in `src/data/wordLists.js`
+- **Strength scoring**: Adjust the logic in `src/utils/strength.js`
+- **Generation behavior**: Tweak or add functions in `src/generators/passwordGenerators.js`
+
+## 🧭 Development Notes (future you will thank you)
+
+- **New modes/filters**: Add a generator in `src/generators/passwordGenerators.js`, wire a checkbox in the `options` map inside `src/ui/passwordController.js`, and (if it changes the slider behavior) extend `MODE_CONFIGS` in `src/config/modeConfigs.js`.
+- **Word/phrase experiments**: Drop fresh lists or rhyme families into `src/data/wordLists.js` and reuse `choose`/`chooseMany` helpers from `src/utils/random.js`.
+- **UI tweaks**: Keep DOM-specific code in `src/ui/passwordController.js` so generators stay pure and testable.
+- **Testing ideas**: The generators are pure—easy to unit test in isolation if you add a test runner later.
 
 ## 🤝 Contributing
 
