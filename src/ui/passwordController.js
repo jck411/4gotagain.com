@@ -107,6 +107,13 @@ class PasswordController {
                 const isExpanded = this.customWordToggle.getAttribute('aria-expanded') === 'true';
                 this.customWordToggle.setAttribute('aria-expanded', !isExpanded);
                 this.customWordSection.classList.toggle('expanded', !isExpanded);
+
+                // Scroll into view when expanding on mobile
+                if (!isExpanded) {
+                    setTimeout(() => {
+                        this.customWordSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    }, 50);
+                }
             });
         }
 
