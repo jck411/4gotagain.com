@@ -147,7 +147,7 @@ class PasswordController {
         newSlot.innerHTML = `
             <div class="password-display">
                 <label for="password-${this.passwordCount - 1}" class="visually-hidden">Generated password</label>
-                <input type="text" id="password-${this.passwordCount - 1}" class="password-output" readonly placeholder="Your password will appear here..." aria-label="Generated password">
+                <input type="text" id="password-${this.passwordCount - 1}" class="password-output" placeholder="Your password will appear here..." aria-label="Generated password">
                 <div class="password-actions">
                     <button class="action-btn generate-row-btn" title="Generate new password" aria-label="Generate new password">
                         <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
