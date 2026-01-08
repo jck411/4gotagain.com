@@ -774,6 +774,10 @@ header {
     color: var(--text-secondary);
 }
 
+.word-count-control .password-controls {
+    margin-bottom: 0;
+}
+
 .control-header {
     display: flex;
     align-items: center;

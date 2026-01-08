@@ -1,4 +1,4 @@
-import { MODE_CONFIGS, DEFAULT_LIMITS } from '../config/modeConfigs.js';
+import { MODE_CONFIGS, DEFAULT_LIMITS, WORD_COUNT_CONFIG } from '../config/modeConfigs.js';
 import { memoryTechniques, securityTips, passwordTypeTips } from '../data/tips.js';
 import {
     generateRandomPassword,
@@ -16,6 +16,8 @@ class PasswordController {
         this.maxPasswords = DEFAULT_LIMITS.maxPasswords;
         this.currentMode = 'regular';
         this.customWordPosition = 'start';
+        this.lastModeValues = {};
+        this.wordCount = WORD_COUNT_CONFIG.default;
 
         this.initializeElements();
         this.setupEventListeners();
@@ -31,6 +33,10 @@ class PasswordController {
         this.strengthDot = document.getElementById('strengthDot');
         this.strengthText = document.getElementById('strengthText');
         this.copyFeedback = document.getElementById('copyFeedback');
+        this.wordCountControl = document.getElementById('wordCountControl');
+        this.wordCountValue = document.getElementById('wordCountValue');
+        this.wordCountDown = document.getElementById('wordCountDown');
+        this.wordCountUp = document.getElementById('wordCountUp');
 
         this.options = {
             uppercase: document.getElementById('uppercase'),
@@ -68,15 +74,29 @@ class PasswordController {
             }
         }
 
+        this.lastModeValues = {
+            regular: this.lengthSlider ? parseInt(this.lengthSlider.value, 10) : MODE_CONFIGS.regular.default,
+            words: MODE_CONFIGS.words.default
+        };
+
+        this.updateWordCountControls();
+        this.updateWordCountVisibility();
         this.updateAddButtonState();
         this.populateDropdowns();
     }
 
     setupEventListeners() {
         this.lengthSlider.addEventListener('input', () => {
-            this.updateLengthLabel(this.lengthSlider.value);
+            const value = parseInt(this.lengthSlider.value, 10);
+            this.lastModeValues[this.currentMode] = value;
+            this.updateLengthLabel(value);
             this.generateAllPasswords();
         });
+
+        if (this.wordCountDown && this.wordCountUp) {
+            this.wordCountDown.addEventListener('click', () => this.adjustWordCount(-1));
+            this.wordCountUp.addEventListener('click', () => this.adjustWordCount(1));
+        }
 
         Object.entries(this.options).forEach(([key, option]) => {
             option.addEventListener('change', () => {
@@ -232,6 +252,37 @@ class PasswordController {
         this.addPasswordBtn.disabled = this.passwordCount >= this.maxPasswords;
     }
 
+    updateWordCountControls() {
+        if (this.wordCountValue) {
+            this.wordCountValue.textContent = this.wordCount;
+        }
+        if (this.wordCountDown) {
+            this.wordCountDown.disabled = this.wordCount <= WORD_COUNT_CONFIG.min;
+        }
+        if (this.wordCountUp) {
+            this.wordCountUp.disabled = this.wordCount >= WORD_COUNT_CONFIG.max;
+        }
+    }
+
+    adjustWordCount(delta) {
+        const nextValue = Math.max(
+            WORD_COUNT_CONFIG.min,
+            Math.min(WORD_COUNT_CONFIG.max, this.wordCount + delta)
+        );
+
+        if (nextValue === this.wordCount) return;
+
+        this.wordCount = nextValue;
+        this.updateWordCountControls();
+        this.generateAllPasswords();
+    }
+
+    updateWordCountVisibility() {
+        if (this.wordCountControl) {
+            this.wordCountControl.hidden = !this.isWordMode();
+        }
+    }
+
     isWordMode() {
         return (
             this.options.humanMemorable.checked ||
@@ -244,16 +295,11 @@ class PasswordController {
         const newMode = this.isWordMode() ? 'words' : 'regular';
 
         if (this.currentMode !== newMode) {
+            this.lastModeValues[this.currentMode] = parseInt(this.lengthSlider.value, 10);
             this.currentMode = newMode;
             const config = MODE_CONFIGS[newMode];
-            const oldVal = parseInt(this.lengthSlider.value, 10);
-
-            let newVal;
-            if (newMode === 'words') {
-                newVal = Math.max(config.min, Math.min(config.max, Math.round(oldVal / 6)));
-            } else {
-                newVal = Math.max(config.min, Math.min(config.max, oldVal * 6));
-            }
+            const savedValue = this.lastModeValues[newMode] ?? config.default;
+            const newVal = Math.max(config.min, Math.min(config.max, savedValue));
 
             this.lengthSlider.min = config.min;
             this.lengthSlider.max = config.max;
@@ -261,14 +307,16 @@ class PasswordController {
 
             this.updateLengthLabel(newVal);
         }
+
+        this.updateWordCountVisibility();
     }
 
     updateLengthLabel(value, actualLength = null) {
         if (this.currentMode === 'words') {
-            this.lengthLabelText.textContent = 'Words';
+            this.lengthLabelText.textContent = 'Word length';
             let displayText = `${value}`;
             if (actualLength) {
-                displayText += ` <span style="font-size: 0.8em; opacity: 0.7; font-weight: normal;">(Length: ${actualLength})</span>`;
+                displayText += ` <span style="font-size: 0.8em; opacity: 0.7; font-weight: normal;">(Password length: ${actualLength})</span>`;
             }
             this.lengthValue.innerHTML = displayText;
         } else {
@@ -330,11 +378,13 @@ class PasswordController {
     generateSinglePassword() {
         const customWord = this.customWordInput.value.trim();
         const isWordMode = this.isWordMode();
-        const wordCount = parseInt(this.lengthSlider.value, 10);
+        const wordLength = parseInt(this.lengthSlider.value, 10);
+        const wordCount = this.wordCount;
         const useSeparators = this.options.separators.checked;
 
         const baseConfig = {
             wordCount,
+            wordLength,
             includeNumbers: this.options.numbers.checked,
             includeSymbols: this.options.symbols.checked,
             useUppercase: this.options.uppercase.checked,

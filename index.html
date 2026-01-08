@@ -62,7 +62,7 @@
     <link rel="dns-prefetch" href="https://fonts.googleapis.com">
 
     <!-- Stylesheet -->
-    <link rel="stylesheet" href="style.css?v=1.1.0">
+    <link rel="stylesheet" href="style.css?v=1.1.6">
 
     <!-- JSON-LD Structured Data -->
     <script type="application/ld+json">
@@ -232,6 +232,15 @@
                 </section>
 
                 <section class="controls" aria-label="Password Options">
+                    <div class="control-group word-count-control" id="wordCountControl" hidden>
+                        <div class="password-controls" role="group" aria-label="Word count">
+                            <button type="button" class="pw-count-btn" id="wordCountDown"
+                                aria-label="Decrease word count">-</button>
+                            <span class="password-count-label">Word count: <span id="wordCountValue">1</span></span>
+                            <button type="button" class="pw-count-btn" id="wordCountUp"
+                                aria-label="Increase word count">+</button>
+                        </div>
+                    </div>
                     <div class="control-group">
                         <div class="control-header">
                             <label for="length"><span id="lengthLabelText">Length</span>: <span
@@ -343,7 +352,7 @@
         </aside>
     </div>
 
-    <script type="module" src="src/main.js?v=1.1.0"></script>
+    <script type="module" src="src/main.js?v=1.1.6"></script>
 </body>
 
 </html>

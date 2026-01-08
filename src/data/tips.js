@@ -58,7 +58,7 @@ export const passwordTypeTips = [
     {
         icon: '📝',
         title: 'Use Words',
-        description: 'Uses actual words in a pattern (adjective-noun-verb) for easier recall while staying secure.'
+        description: 'Uses real words for easier recall. Adjust the word length slider to pick shorter or longer words.'
     },
     {
         icon: '🎵',
