@@ -222,15 +222,6 @@
                 </section>
 
                 <section class="controls" aria-label="Password Options">
-                    <div class="control-group word-count-control" id="wordCountControl" hidden>
-                        <div class="password-controls" role="group" aria-label="Word count">
-                            <button type="button" class="pw-count-btn" id="wordCountDown"
-                                aria-label="Decrease word count">-</button>
-                            <span class="password-count-label">Word count: <span id="wordCountValue">1</span></span>
-                            <button type="button" class="pw-count-btn" id="wordCountUp"
-                                aria-label="Increase word count">+</button>
-                        </div>
-                    </div>
                     <div class="control-group">
                         <div class="control-header">
                             <label for="length"><span id="lengthLabelText">Length</span>: <span
@@ -241,6 +232,15 @@
                             </span>
                         </div>
                         <input type="range" id="length" min="8" max="128" value="16" aria-describedby="lengthValue">
+                    </div>
+                    <div class="control-group word-count-control" id="wordCountControl" hidden>
+                        <div class="password-controls" role="group" aria-label="Word count">
+                            <button type="button" class="pw-count-btn" id="wordCountDown"
+                                aria-label="Decrease word count">-</button>
+                            <span class="password-count-label">Word count: <span id="wordCountValue">1</span></span>
+                            <button type="button" class="pw-count-btn" id="wordCountUp"
+                                aria-label="Increase word count">+</button>
+                        </div>
                     </div>
 
                     <fieldset class="options">
