@@ -68,8 +68,7 @@ export const generateMemorablePassword = ({ wordCount, includeNumbers, includeSy
     let password = words.join(separator);
 
     if (includeNumbers) {
-        const numberWords = choose(WORD_LISTS.numbers);
-        password += separator + numberWords;
+        password += separator + randomNumber(1, 99);
     }
 
     if (includeSymbols) {
