@@ -48,7 +48,8 @@ class PasswordController {
             avoidAmbiguous: document.getElementById('avoidAmbiguous'),
             humanMemorable: document.getElementById('humanMemorable'),
             rhymingPassword: document.getElementById('rhymingPassword'),
-            objectsOnly: document.getElementById('objectsOnly')
+            objectsOnly: document.getElementById('objectsOnly'),
+            leetSpeak: document.getElementById('leetSpeak')
         };
 
         this.customWordInput = document.getElementById('customWord');
@@ -403,7 +404,8 @@ class PasswordController {
             includeSymbols: this.options.symbols.checked,
             useUppercase: this.options.uppercase.checked,
             useSeparators,
-            uppercaseStyle
+            uppercaseStyle,
+            leetSpeak: this.options.leetSpeak.checked
         };
 
         let password = '';

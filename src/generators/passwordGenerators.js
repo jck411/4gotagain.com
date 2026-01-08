@@ -41,6 +41,29 @@ const uppercaseByStyle = (word, uppercaseStyle) => {
     return uppercaseFirstLetter(word);
 };
 
+const LEET_MAP = {
+    a: '4', A: '4',
+    e: '3', E: '3',
+    i: '1', I: '1',
+    o: '0', O: '0',
+    s: '5', S: '5',
+    t: '7', T: '7',
+    b: '8', B: '8',
+    g: '9', G: '9'
+};
+
+const applyLeetSpeak = (text) => {
+    return text
+        .split('')
+        .map((char) => {
+            if (LEET_MAP[char] && randomIndex(2) === 0) {
+                return LEET_MAP[char];
+            }
+            return char;
+        })
+        .join('');
+};
+
 const maybeCapitalize = (word, useUppercase, uppercaseStyle = 'first') => {
     if (!useUppercase || randomIndex(2) === 0) return word;
     return uppercaseByStyle(word, uppercaseStyle);
@@ -152,7 +175,8 @@ export const generateMemorablePassword = ({
     includeSymbols,
     useUppercase,
     useSeparators,
-    uppercaseStyle = 'first'
+    uppercaseStyle = 'first',
+    leetSpeak = false
 }) => {
     const words = [];
 
@@ -204,6 +228,10 @@ export const generateMemorablePassword = ({
         }
     }
 
+    if (leetSpeak) {
+        password = applyLeetSpeak(password);
+    }
+
     return password;
 };
 
@@ -214,7 +242,8 @@ export const generateRhymingPassword = ({
     includeSymbols,
     useUppercase,
     useSeparators,
-    uppercaseStyle = 'first'
+    uppercaseStyle = 'first',
+    leetSpeak = false
 }) => {
     let selectedWords = [];
 
@@ -244,6 +273,10 @@ export const generateRhymingPassword = ({
         password = symbol + password + symbol;
     }
 
+    if (leetSpeak) {
+        password = applyLeetSpeak(password);
+    }
+
     return password;
 };
 
@@ -254,7 +287,8 @@ export const generateObjectsOnlyPassword = ({
     includeSymbols,
     useUppercase,
     useSeparators,
-    uppercaseStyle = 'first'
+    uppercaseStyle = 'first',
+    leetSpeak = false
 }) => {
     const words = [];
     for (let i = 0; i < wordCount; i++) {
@@ -275,6 +309,10 @@ export const generateObjectsOnlyPassword = ({
         password = symbol + password + symbol;
     }
 
+    if (leetSpeak) {
+        password = applyLeetSpeak(password);
+    }
+
     return password;
 };
 
@@ -285,7 +323,8 @@ export const generateRhymingObjectsPassword = ({
     includeSymbols,
     useUppercase,
     useSeparators,
-    uppercaseStyle = 'first'
+    uppercaseStyle = 'first',
+    leetSpeak = false
 }) => {
     let selectedWords = [];
 
@@ -313,6 +352,10 @@ export const generateRhymingObjectsPassword = ({
     if (includeSymbols) {
         const symbol = randomSymbol();
         password = symbol + password + symbol;
+    }
+
+    if (leetSpeak) {
+        password = applyLeetSpeak(password);
     }
 
     return password;
