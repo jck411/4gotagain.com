@@ -95,6 +95,13 @@ class PasswordController {
 
         this.customWordInput.addEventListener('input', () => this.generateAllPasswords());
 
+        // Scroll input into view when keyboard opens on mobile
+        this.customWordInput.addEventListener('focus', () => {
+            setTimeout(() => {
+                this.customWordInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 300);
+        });
+
         if (this.clearCustomWordBtn) {
             this.clearCustomWordBtn.addEventListener('click', () => {
                 this.customWordInput.value = '';
