@@ -30,85 +30,30 @@ const uppercaseFirstLetter = (word) => {
     return word.charAt(0).toUpperCase() + word.slice(1);
 };
 
-const maybeCapitalize = (word, useUppercase) => {
-    if (!useUppercase || randomIndex(2) === 0) return word;
+const uppercaseRandomLetter = (word) => {
+    if (!word) return word;
+    const index = randomIndex(word.length);
+    return `${word.slice(0, index)}${word.charAt(index).toUpperCase()}${word.slice(index + 1)}`;
+};
+
+const uppercaseByStyle = (word, uppercaseStyle) => {
+    if (uppercaseStyle === 'random') return uppercaseRandomLetter(word);
     return uppercaseFirstLetter(word);
 };
 
-const ensureAtLeastOneUppercase = (words, useUppercase) => {
+const maybeCapitalize = (word, useUppercase, uppercaseStyle = 'first') => {
+    if (!useUppercase || randomIndex(2) === 0) return word;
+    return uppercaseByStyle(word, uppercaseStyle);
+};
+
+const ensureAtLeastOneUppercase = (words, useUppercase, uppercaseStyle = 'first') => {
     if (!useUppercase) return words;
     if (words.some((word) => /[A-Z]/.test(word))) return words;
     if (!words.length) return words;
 
     const idx = randomNumber(0, words.length - 1);
-    words[idx] = uppercaseFirstLetter(words[idx]);
+    words[idx] = uppercaseByStyle(words[idx], uppercaseStyle);
     return words;
-};
-
-const LEET_MAPS = {
-    full: {
-        a: ['4', '@'],
-        b: ['8'],
-        e: ['3'],
-        g: ['6', '9'],
-        i: ['1', '!'],
-        l: ['1'],
-        o: ['0'],
-        s: ['5', '$'],
-        t: ['7', '+'],
-        z: ['2']
-    },
-    lite: {
-        a: ['4', '@'],
-        e: ['3'],
-        i: ['1', '!'],
-        o: ['0'],
-        s: ['5', '$'],
-        t: ['7']
-    }
-};
-
-const LITE_REPLACE_CHANCE = 40;
-
-const pickLeetReplacement = (options, avoidAmbiguous) => {
-    const replacements = avoidAmbiguous
-        ? options.filter((option) => !AMBIGUOUS_CHARS.includes(option))
-        : options;
-
-    if (!replacements.length) return null;
-    return replacements[randomIndex(replacements.length)];
-};
-
-const shouldReplaceLeet = (mode) => {
-    if (mode === 'full') return true;
-    return randomIndex(100) < LITE_REPLACE_CHANCE;
-};
-
-export const applyLeetSpeak = ({ text, mode, avoidAmbiguous }) => {
-    if (!text || mode === 'off') return text;
-    const map = LEET_MAPS[mode];
-    if (!map) return text;
-
-    let result = '';
-    for (const char of text) {
-        const isUpper = char >= 'A' && char <= 'Z';
-        if (isUpper) {
-            result += char;
-            continue;
-        }
-
-        const lower = char.toLowerCase();
-        const replacements = map[lower];
-        if (!replacements || !shouldReplaceLeet(mode)) {
-            result += char;
-            continue;
-        }
-
-        const replacement = pickLeetReplacement(replacements, avoidAmbiguous);
-        result += replacement ?? char;
-    }
-
-    return result;
 };
 
 const flattenLists = (lists) => lists.reduce((accumulator, list) => accumulator.concat(list), []);
@@ -135,8 +80,8 @@ const getWordCandidates = (list, targetLength, minCount = 1) => {
     return exactMatches.length ? exactMatches : list;
 };
 
-const getRandomWord = (list, useUppercase, targetLength) =>
-    maybeCapitalize(choose(getWordCandidates(list, targetLength)), useUppercase);
+const getRandomWord = (list, useUppercase, targetLength, uppercaseStyle) =>
+    maybeCapitalize(choose(getWordCandidates(list, targetLength)), useUppercase, uppercaseStyle);
 
 export const buildCharset = (options) => {
     let charset = '';
@@ -206,7 +151,8 @@ export const generateMemorablePassword = ({
     includeNumbers,
     includeSymbols,
     useUppercase,
-    useSeparators
+    useSeparators,
+    uppercaseStyle = 'first'
 }) => {
     const words = [];
 
@@ -217,30 +163,30 @@ export const generateMemorablePassword = ({
             ...WORD_LISTS.verbs,
             ...WORD_LISTS.numbers
         ];
-        words.push(getRandomWord(combined, useUppercase, wordLength));
+        words.push(getRandomWord(combined, useUppercase, wordLength, uppercaseStyle));
     } else {
         for (let i = 0; i < wordCount; i++) {
             let word = '';
 
             if (i % 4 === 0) {
-                word = getRandomWord(WORD_LISTS.adjectives, useUppercase, wordLength);
+                word = getRandomWord(WORD_LISTS.adjectives, useUppercase, wordLength, uppercaseStyle);
             } else if (i % 4 === 1) {
                 const categories = Object.keys(WORD_LISTS.nouns);
                 const randomCategory = choose(categories);
-                word = getRandomWord(WORD_LISTS.nouns[randomCategory], useUppercase, wordLength);
+                word = getRandomWord(WORD_LISTS.nouns[randomCategory], useUppercase, wordLength, uppercaseStyle);
             } else if (i % 4 === 2) {
-                word = getRandomWord(WORD_LISTS.verbs, useUppercase, wordLength);
+                word = getRandomWord(WORD_LISTS.verbs, useUppercase, wordLength, uppercaseStyle);
             } else {
                 const categories = Object.keys(WORD_LISTS.nouns);
                 const randomCategory = choose(categories);
-                word = getRandomWord(WORD_LISTS.nouns[randomCategory], useUppercase, wordLength);
+                word = getRandomWord(WORD_LISTS.nouns[randomCategory], useUppercase, wordLength, uppercaseStyle);
             }
 
             words.push(word);
         }
     }
 
-    ensureAtLeastOneUppercase(words, useUppercase);
+    ensureAtLeastOneUppercase(words, useUppercase, uppercaseStyle);
 
     const separator = useSeparators ? randomSeparator() : '';
     let password = words.join(separator);
@@ -254,7 +200,7 @@ export const generateMemorablePassword = ({
         if (wordCount <= 1) {
             password = symbol + password + symbol;
         } else {
-            password += symbol + getRandomWord(WORD_LISTS.adjectives, useUppercase, wordLength);
+            password += symbol + getRandomWord(WORD_LISTS.adjectives, useUppercase, wordLength, uppercaseStyle);
         }
     }
 
@@ -267,21 +213,24 @@ export const generateRhymingPassword = ({
     includeNumbers,
     includeSymbols,
     useUppercase,
-    useSeparators
+    useSeparators,
+    uppercaseStyle = 'first'
 }) => {
     let selectedWords = [];
 
     if (wordCount <= 1) {
         const allRhymes = flattenLists(Object.values(RHYME_FAMILIES));
-        selectedWords = [getRandomWord(allRhymes, useUppercase, wordLength)];
+        selectedWords = [getRandomWord(allRhymes, useUppercase, wordLength, uppercaseStyle)];
     } else {
         const families = Object.keys(RHYME_FAMILIES);
         const randomFamilyKey = choose(families);
         const candidates = getWordCandidates(RHYME_FAMILIES[randomFamilyKey], wordLength, wordCount);
-        selectedWords = chooseMany(candidates, wordCount).map((word) => maybeCapitalize(word, useUppercase));
+        selectedWords = chooseMany(candidates, wordCount).map((word) =>
+            maybeCapitalize(word, useUppercase, uppercaseStyle)
+        );
     }
 
-    ensureAtLeastOneUppercase(selectedWords, useUppercase);
+    ensureAtLeastOneUppercase(selectedWords, useUppercase, uppercaseStyle);
 
     const separator = useSeparators ? randomSeparator() : '';
     let password = selectedWords.join(separator);
@@ -304,14 +253,15 @@ export const generateObjectsOnlyPassword = ({
     includeNumbers,
     includeSymbols,
     useUppercase,
-    useSeparators
+    useSeparators,
+    uppercaseStyle = 'first'
 }) => {
     const words = [];
     for (let i = 0; i < wordCount; i++) {
-        words.push(getRandomWord(WORD_LISTS.nouns.objects, useUppercase, wordLength));
+        words.push(getRandomWord(WORD_LISTS.nouns.objects, useUppercase, wordLength, uppercaseStyle));
     }
 
-    ensureAtLeastOneUppercase(words, useUppercase);
+    ensureAtLeastOneUppercase(words, useUppercase, uppercaseStyle);
 
     const separator = useSeparators ? randomSeparator() : '';
     let password = words.join(separator);
@@ -334,21 +284,24 @@ export const generateRhymingObjectsPassword = ({
     includeNumbers,
     includeSymbols,
     useUppercase,
-    useSeparators
+    useSeparators,
+    uppercaseStyle = 'first'
 }) => {
     let selectedWords = [];
 
     if (wordCount <= 1) {
         const allRhymes = flattenLists(Object.values(RHYMING_OBJECTS));
-        selectedWords = [getRandomWord(allRhymes, useUppercase, wordLength)];
+        selectedWords = [getRandomWord(allRhymes, useUppercase, wordLength, uppercaseStyle)];
     } else {
         const families = Object.keys(RHYMING_OBJECTS);
         const randomFamilyKey = choose(families);
         const candidates = getWordCandidates(RHYMING_OBJECTS[randomFamilyKey], wordLength, wordCount);
-        selectedWords = chooseMany(candidates, wordCount).map((word) => maybeCapitalize(word, useUppercase));
+        selectedWords = chooseMany(candidates, wordCount).map((word) =>
+            maybeCapitalize(word, useUppercase, uppercaseStyle)
+        );
     }
 
-    ensureAtLeastOneUppercase(selectedWords, useUppercase);
+    ensureAtLeastOneUppercase(selectedWords, useUppercase, uppercaseStyle);
 
     const separator = useSeparators ? randomSeparator() : '';
     let password = selectedWords.join(separator);

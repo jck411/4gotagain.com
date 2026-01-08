@@ -5,8 +5,7 @@ import {
     generateMemorablePassword,
     generateRhymingPassword,
     generateObjectsOnlyPassword,
-    generateRhymingObjectsPassword,
-    applyLeetSpeak
+    generateRhymingObjectsPassword
 } from '../generators/passwordGenerators.js';
 import { randomSeparator, randomNumber } from '../utils/random.js';
 import { calculateStrength, strengthMeta } from '../utils/strength.js';
@@ -41,14 +40,13 @@ class PasswordController {
 
         this.options = {
             uppercase: document.getElementById('uppercase'),
+            uppercaseRandom: document.getElementById('uppercaseRandom'),
             lowercase: document.getElementById('lowercase'),
             numbers: document.getElementById('numbers'),
             symbols: document.getElementById('symbols'),
             separators: document.getElementById('separators'),
             avoidAmbiguous: document.getElementById('avoidAmbiguous'),
             humanMemorable: document.getElementById('humanMemorable'),
-            leetFull: document.getElementById('leetFull'),
-            leetLite: document.getElementById('leetLite'),
             rhymingPassword: document.getElementById('rhymingPassword'),
             objectsOnly: document.getElementById('objectsOnly')
         };
@@ -110,10 +108,6 @@ class PasswordController {
                     this.options.objectsOnly.checked = false;
                 } else if ((key === 'rhymingPassword' || key === 'objectsOnly') && option.checked) {
                     this.options.humanMemorable.checked = false;
-                } else if (key === 'leetFull' && option.checked) {
-                    this.options.leetLite.checked = false;
-                } else if (key === 'leetLite' && option.checked) {
-                    this.options.leetFull.checked = false;
                 }
 
                 this.checkModeAndUpdateSlider();
@@ -400,11 +394,7 @@ class PasswordController {
         const wordLength = parseInt(this.lengthSlider.value, 10);
         const wordCount = this.wordCount;
         const useSeparators = this.options.separators.checked;
-        const leetMode = this.options.leetFull.checked
-            ? 'full'
-            : this.options.leetLite.checked
-                ? 'lite'
-                : 'off';
+        const uppercaseStyle = this.options.uppercaseRandom.checked ? 'random' : 'first';
 
         const baseConfig = {
             wordCount,
@@ -412,7 +402,8 @@ class PasswordController {
             includeNumbers: this.options.numbers.checked,
             includeSymbols: this.options.symbols.checked,
             useUppercase: this.options.uppercase.checked,
-            useSeparators
+            useSeparators,
+            uppercaseStyle
         };
 
         let password = '';
@@ -442,7 +433,14 @@ class PasswordController {
             let formattedWord = customWord;
             if (this.options.uppercase.checked && formattedWord.length) {
                 if (randomNumber(0, 1) === 1) {
-                    formattedWord = formattedWord.charAt(0).toUpperCase() + formattedWord.slice(1);
+                    if (uppercaseStyle === 'random') {
+                        const index = randomNumber(0, formattedWord.length - 1);
+                        formattedWord = `${formattedWord.slice(0, index)}${formattedWord
+                            .charAt(index)
+                            .toUpperCase()}${formattedWord.slice(index + 1)}`;
+                    } else {
+                        formattedWord = formattedWord.charAt(0).toUpperCase() + formattedWord.slice(1);
+                    }
                 }
             }
 
@@ -458,14 +456,6 @@ class PasswordController {
                         ? `${formattedWord}${password}`
                         : `${password}${formattedWord}`;
             }
-        }
-
-        if (isWordMode && leetMode !== 'off') {
-            password = applyLeetSpeak({
-                text: password,
-                mode: leetMode,
-                avoidAmbiguous: this.options.avoidAmbiguous.checked
-            });
         }
 
         return password;
