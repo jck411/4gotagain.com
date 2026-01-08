@@ -12,16 +12,20 @@ import { calculateStrength, strengthMeta } from '../utils/strength.js';
 
 class PasswordController {
     constructor() {
+        this.passwordCount = 1;
+        this.maxPasswords = DEFAULT_LIMITS.maxPasswords;
         this.currentMode = 'regular';
         this.customWordPosition = 'start';
 
         this.initializeElements();
         this.setupEventListeners();
-        this.generatePassword();
+        this.generateAllPasswords();
     }
 
     initializeElements() {
         this.passwordList = document.getElementById('passwordList');
+        this.passwordCountDisplay = document.getElementById('passwordCount');
+        this.addPasswordBtn = document.getElementById('addPasswordBtn');
         this.lengthSlider = document.getElementById('length');
         this.lengthValue = document.getElementById('lengthValue');
         this.lengthLabelText = document.getElementById('lengthLabelText');
@@ -62,13 +66,14 @@ class PasswordController {
             }
         }
 
+        this.updateAddButtonState();
         this.populateDropdowns();
     }
 
     setupEventListeners() {
         this.lengthSlider.addEventListener('input', () => {
             this.updateLengthLabel(this.lengthSlider.value);
-            this.generatePassword();
+            this.generateAllPasswords();
         });
 
         Object.entries(this.options).forEach(([key, option]) => {
@@ -82,36 +87,39 @@ class PasswordController {
 
                 this.checkModeAndUpdateSlider();
                 this.toggleMemorableInfo();
-                this.generatePassword();
+                this.generateAllPasswords();
             });
         });
 
-        this.customWordInput.addEventListener('input', () => this.generatePassword());
+        this.customWordInput.addEventListener('input', () => this.generateAllPasswords());
 
         this.wordPositionStart.addEventListener('click', () => {
             this.customWordPosition = 'start';
             this.wordPositionStart.classList.add('active');
             this.wordPositionEnd.classList.remove('active');
-            this.generatePassword();
+            this.generateAllPasswords();
         });
 
         this.wordPositionEnd.addEventListener('click', () => {
             this.customWordPosition = 'end';
             this.wordPositionEnd.classList.add('active');
             this.wordPositionStart.classList.remove('active');
-            this.generatePassword();
+            this.generateAllPasswords();
         });
+
+        this.addPasswordBtn.addEventListener('click', () => this.addPasswordSlot());
 
         this.passwordList.addEventListener('click', (e) => {
             const generateBtn = e.target.closest('.generate-row-btn');
             const copyBtn = e.target.closest('.copy-btn');
+            const removeBtn = e.target.closest('.remove-row-btn');
 
             if (generateBtn) {
                 const passwordSlot = generateBtn.closest('.password-slot');
                 generateBtn.classList.add('spinning');
                 setTimeout(() => generateBtn.classList.remove('spinning'), 500);
                 this.generatePasswordForSlot(passwordSlot);
-                this.updateStrength();
+                this.updateStrengthFromFirst();
             }
 
             if (copyBtn) {
@@ -119,13 +127,82 @@ class PasswordController {
                 const input = passwordSlot.querySelector('.password-output');
                 this.copyToClipboard(input, copyBtn);
             }
+
+            if (removeBtn) {
+                this.removePasswordSlot(removeBtn.closest('.password-slot'));
+            }
         });
 
         this.tipsDropdownBtn.addEventListener('click', () => this.toggleDropdown('tips'));
         this.securityDropdownBtn.addEventListener('click', () => this.toggleDropdown('security'));
     }
 
+    addPasswordSlot() {
+        if (this.passwordCount >= this.maxPasswords) return;
 
+        this.passwordCount++;
+        this.passwordCountDisplay.textContent = this.passwordCount;
+
+        const newSlot = document.createElement('div');
+        newSlot.className = 'password-slot';
+        newSlot.dataset.index = this.passwordCount - 1;
+        newSlot.innerHTML = `
+            <div class="password-display">
+                <label for="password-${this.passwordCount - 1}" class="visually-hidden">Generated password</label>
+                <input type="text" id="password-${this.passwordCount - 1}" class="password-output" readonly placeholder="Your password will appear here..." aria-label="Generated password">
+                <div class="password-actions">
+                    <button class="action-btn generate-row-btn" title="Generate new password" aria-label="Generate new password">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/>
+                        </svg>
+                    </button>
+                    <button class="action-btn copy-btn" title="Copy to clipboard" aria-label="Copy password to clipboard">
+                        <span class="copy-icon-default">
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                            </svg>
+                        </span>
+                        <span class="copy-icon-success">
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </span>
+                    </button>
+                    <button class="action-btn remove-row-btn" title="Remove this password" aria-label="Remove this password">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="18" y1="6" x2="6" y2="18"/>
+                            <line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        `;
+
+        this.passwordList.appendChild(newSlot);
+        this.generatePasswordForSlot(newSlot);
+        this.updateAddButtonState();
+    }
+
+    removePasswordSlot(slotToRemove = null) {
+        if (this.passwordCount <= 1) return;
+
+        if (slotToRemove) {
+            slotToRemove.remove();
+        } else {
+            const slots = this.passwordList.querySelectorAll('.password-slot');
+            slots[slots.length - 1].remove();
+        }
+
+        this.passwordCount--;
+        this.passwordCountDisplay.textContent = this.passwordCount;
+        this.updateAddButtonState();
+        this.updateStrengthFromFirst();
+    }
+
+    updateAddButtonState() {
+        this.addPasswordBtn.disabled = this.passwordCount >= this.maxPasswords;
+    }
 
     isWordMode() {
         return (
@@ -172,11 +249,17 @@ class PasswordController {
         }
     }
 
-    generatePassword() {
-        const slot = this.passwordList.querySelector('.password-slot');
-        const password = this.generatePasswordForSlot(slot);
-        this.updateLengthLabel(this.lengthSlider.value, password.length);
-        this.updateStrength();
+    generateAllPasswords() {
+        const slots = this.passwordList.querySelectorAll('.password-slot');
+        let firstPasswordLength = 0;
+
+        slots.forEach((slot, index) => {
+            const password = this.generatePasswordForSlot(slot);
+            if (index === 0) firstPasswordLength = password.length;
+        });
+
+        this.updateLengthLabel(this.lengthSlider.value, firstPasswordLength);
+        this.updateStrengthFromFirst();
     }
 
     generatePasswordForSlot(slot) {
@@ -247,7 +330,7 @@ class PasswordController {
         return password;
     }
 
-    updateStrength() {
+    updateStrengthFromFirst() {
         const firstInput = this.passwordList.querySelector('.password-output');
         if (!firstInput) return;
 
