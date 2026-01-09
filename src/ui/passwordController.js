@@ -33,6 +33,7 @@ class PasswordController {
 
         this.initializeElements();
         this.setupEventListeners();
+        this.setDefaultOptions();
         this.generateAllPasswords();
     }
 
@@ -127,6 +128,27 @@ class PasswordController {
         this.updateSymbolCountVisibility();
         this.populateModals();
         this.setupModalListeners();
+    }
+
+    setDefaultOptions() {
+        // Set default checked options on page load
+        this.options.humanMemorable.checked = true;
+        this.options.leetSpeak.checked = true;
+        this.options.nflTeams.checked = true;
+
+        // Update mode to words and set slider to minimum for "any" word length
+        this.checkModeAndUpdateSlider();
+
+        // Set the slider to minimum (which represents "any" word length)
+        const config = MODE_CONFIGS.words;
+        this.lengthSlider.value = config.min;
+        this.lastModeValues.words = config.min;
+        this.updateLengthLabel(config.min);
+
+        // Update visibility of controls
+        this.updateWordCountVisibility();
+        this.updateNumberCountVisibility();
+        this.updateSymbolCountVisibility();
     }
 
     setupEventListeners() {
