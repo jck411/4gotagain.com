@@ -200,6 +200,12 @@ class PasswordController {
             'nhlTeams', 'eplTeams', 'iplTeams', 'laLigaTeams', 'f1Teams'
         ];
 
+        // Sports teams - rhyming is mutually exclusive with these
+        const sportsTeamOptions = [
+            'nflTeams', 'mlbTeams', 'nbaTeams', 'nhlTeams',
+            'eplTeams', 'iplTeams', 'laLigaTeams', 'f1Teams'
+        ];
+
         Object.entries(this.options).forEach(([key, option]) => {
             option.addEventListener('change', () => {
                 // humanMemorable is always mutually exclusive with all word categories
@@ -223,8 +229,17 @@ class PasswordController {
 
                     // Always uncheck humanMemorable when a category is selected
                     this.options.humanMemorable.checked = false;
+
+                    // If selecting a sports team, uncheck rhyming (no rhyming data for teams)
+                    if (sportsTeamOptions.includes(key)) {
+                        this.options.rhymingPassword.checked = false;
+                    }
                 } else if (key === 'rhymingPassword' && option.checked) {
                     this.options.humanMemorable.checked = false;
+                    // Rhyming is mutually exclusive with sports teams (only works with objectsOnly)
+                    sportsTeamOptions.forEach(cat => {
+                        this.options[cat].checked = false;
+                    });
                 }
 
                 this.checkModeAndUpdateSlider();
