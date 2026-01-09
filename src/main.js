@@ -85,45 +85,8 @@ const initKonamiCode = () => {
     });
 };
 
-/**
- * Scroll-aware sticky header
- * Shows compact branding on scroll-up, hides on scroll-down
- */
-const initStickyHeader = () => {
-    const stickyHeader = document.getElementById('stickyHeader');
-    if (!stickyHeader) return;
-
-    let lastScrollY = 0;
-    let ticking = false;
-    const scrollThreshold = 80; // Minimum scroll before showing sticky header
-
-    const updateHeader = () => {
-        const currentScrollY = window.scrollY;
-
-        // Only show if scrolled past threshold and scrolling UP
-        if (currentScrollY > scrollThreshold && currentScrollY < lastScrollY) {
-            stickyHeader.classList.add('visible');
-            stickyHeader.setAttribute('aria-hidden', 'false');
-        } else {
-            stickyHeader.classList.remove('visible');
-            stickyHeader.setAttribute('aria-hidden', 'true');
-        }
-
-        lastScrollY = currentScrollY;
-        ticking = false;
-    };
-
-    window.addEventListener('scroll', () => {
-        if (!ticking) {
-            requestAnimationFrame(updateHeader);
-            ticking = true;
-        }
-    }, { passive: true });
-};
-
 document.addEventListener('DOMContentLoaded', () => {
     new PasswordController();
     initKeyboardShortcuts();
     initKonamiCode();
-    initStickyHeader();
 });
