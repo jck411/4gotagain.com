@@ -1411,18 +1411,8 @@ input:focus-visible {
         padding: 1.5rem;
     }
 
-    .password-display {
-        flex-direction: column;
-    }
-
     .password-actions {
-        width: 100%;
-    }
-
-    .generate-btn,
-    .copy-btn {
-        flex: 1;
-        justify-content: center;
+        flex-shrink: 0;
     }
 
     .options {
