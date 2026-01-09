@@ -18,7 +18,7 @@ import {
 } from '../generators/passwordGenerators.js';
 import { WORD_LISTS } from '../data/wordLists.js';
 import { randomSeparator, randomNumber } from '../utils/random.js';
-import { calculateStrength, strengthMeta } from '../utils/strength.js';
+import { strengthMetaByLength } from '../utils/strength.js';
 
 class PasswordController {
     constructor() {
@@ -242,23 +242,23 @@ class PasswordController {
                 if (input) {
                     input.value = '';
                 }
-                
+
                 // Untick all checkboxes
                 Object.values(this.options).forEach(option => {
                     option.checked = false;
                 });
-                
+
                 // Clear custom word
                 if (this.customWordInput) {
                     this.customWordInput.value = '';
                 }
-                
+
                 // Reset to default state
                 this.checkModeAndUpdateSlider();
                 this.updateWordCountVisibility();
                 this.updateNumberCountVisibility();
                 this.updateSymbolCountVisibility();
-                this.updateStrength(0);
+                this.updateStrength('');
             });
         }
 
@@ -314,25 +314,25 @@ class PasswordController {
                 const passwordSlot = clearBtn.closest('.password-slot');
                 const input = passwordSlot.querySelector('.password-output');
                 input.value = '';
-                
+
                 // Untick all checkboxes
                 Object.values(this.options).forEach(option => {
                     option.checked = false;
                 });
-                
+
                 // Clear custom word
                 if (this.customWordInput) {
                     this.customWordInput.value = '';
                 }
-                
+
                 // Reset to default state
                 this.checkModeAndUpdateSlider();
                 this.updateWordCountVisibility();
                 this.updateNumberCountVisibility();
                 this.updateSymbolCountVisibility();
-                
+
                 this.animatePasswordInput(input);
-                this.updateStrength(0);
+                this.updateStrength('');
             }
         });
 
@@ -719,12 +719,11 @@ class PasswordController {
         const firstInput = this.passwordList.querySelector('.password-output');
         if (!firstInput) return;
 
-        const score = calculateStrength({ password: firstInput.value, isWordMode: this.isWordMode() });
-        this.updateStrength(score);
+        this.updateStrength(firstInput.value);
     }
 
-    updateStrength(score) {
-        const { text, color } = strengthMeta(score);
+    updateStrength(password) {
+        const { text, color } = strengthMetaByLength(password);
         this.strengthText.textContent = text;
         this.strengthText.style.color = color;
         this.strengthDot.style.background = color;
