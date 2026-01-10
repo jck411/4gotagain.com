@@ -377,6 +377,14 @@ class PasswordController {
             }
         });
 
+        // Handle manual password input to adjust font size and update strength
+        this.passwordList.addEventListener('input', (e) => {
+            if (e.target.classList.contains('password-output')) {
+                this.adjustMobileFontSize(e.target, e.target.value.length);
+                this.updateStrength(e.target.value);
+            }
+        });
+
     }
 
     updateLengthButtons() {
@@ -654,21 +662,16 @@ class PasswordController {
     }
 
     /**
-     * Adjusts font size on mobile based on password length
+     * Adjusts font size based on password length
      * Scales down as password gets longer, with a minimum size
      */
     adjustMobileFontSize(input, passwordLength) {
-        // Only apply on mobile (matches CSS media query)
-        if (window.innerWidth > 640) {
-            input.style.removeProperty('--mobile-pw-font-size');
-            return;
-        }
-
-        // Font size parameters
-        const baseFontRem = 0.95;   // Starting font size in rem
-        const minFontRem = 0.65;    // Minimum font size (don't go smaller)
-        const startShrinkAt = 20;   // Start shrinking at this length
-        const shrinkRate = 0.012;   // How fast to shrink per character
+        // Font size parameters (varies by screen size)
+        const isMobile = window.innerWidth <= 640;
+        const baseFontRem = isMobile ? 0.95 : 1.125;
+        const minFontRem = isMobile ? 0.65 : 0.75;
+        const startShrinkAt = isMobile ? 20 : 30;
+        const shrinkRate = isMobile ? 0.012 : 0.008;
 
         let fontSize = baseFontRem;
 
@@ -678,7 +681,8 @@ class PasswordController {
             fontSize = Math.max(minFontRem, baseFontRem - (excess * shrinkRate));
         }
 
-        input.style.setProperty('--mobile-pw-font-size', `${fontSize}rem`);
+        // Apply font size directly via inline style for maximum specificity
+        input.style.fontSize = `${fontSize}rem`;
     }
 
     generateSinglePassword() {
