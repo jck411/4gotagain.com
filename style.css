@@ -1771,3 +1771,70 @@ fieldset.options {
 .scrollable-controls {
     padding-top: 1.5rem;
 }
+/* Footer Styles */
+footer {
+    width: 100%;
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    text-align: center;
+}
+
+.footer-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.footer-links {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.footer-link-btn {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    cursor: pointer;
+    padding: 0;
+    text-decoration: none;
+    transition: color 0.2s ease;
+    opacity: 0.7;
+}
+
+.footer-link-btn:hover {
+    color: var(--text-primary);
+    opacity: 1;
+    text-decoration: underline;
+}
+
+/* Privacy Modal Theme */
+.privacy-modal-theme {
+    border-top: 4px solid #10b981; /* Green for privacy/safe */
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 30px rgba(16, 185, 129, 0.1);
+}
+
+.privacy-modal-theme .info-modal-header h2 {
+    color: #10b981;
+}
+
+.info-modal-content h3 {
+    color: var(--text-primary);
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+}
+
+.info-modal-content p {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+.info-modal-content strong {
+    color: var(--text-primary);
+}

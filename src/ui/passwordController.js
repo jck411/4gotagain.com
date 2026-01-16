@@ -113,6 +113,9 @@ class PasswordController {
         this.strengthModalOverlay = document.getElementById('strengthModalOverlay');
         this.strengthModalContent = document.getElementById('strengthModalContent');
 
+        this.privacyModalBtn = document.getElementById('privacyModalBtn');
+        this.privacyModalOverlay = document.getElementById('privacyModalOverlay');
+
         const regularConfig = MODE_CONFIGS.regular;
         if (this.lengthSlider) {
             this.lengthSlider.min = regularConfig.min;
@@ -865,6 +868,7 @@ class PasswordController {
         this.tipsModalBtn.addEventListener('click', () => this.openModal('tips'));
         this.securityModalBtn.addEventListener('click', () => this.openModal('security'));
         this.strengthInfoBtn.addEventListener('click', () => this.openModal('strength'));
+        this.privacyModalBtn.addEventListener('click', () => this.openModal('privacy'));
 
         // Close buttons inside modals
         const closeButtons = document.querySelectorAll('.info-modal-close');
@@ -873,7 +877,7 @@ class PasswordController {
         });
 
         // Close on overlay click
-        [this.tipsModalOverlay, this.securityModalOverlay, this.strengthModalOverlay].forEach((overlay) => {
+        [this.tipsModalOverlay, this.securityModalOverlay, this.strengthModalOverlay, this.privacyModalOverlay].forEach((overlay) => {
             overlay.addEventListener('click', (e) => {
                 if (e.target === overlay) {
                     this.closeAllModals();
@@ -893,7 +897,8 @@ class PasswordController {
         const modals = {
             tips: this.tipsModalOverlay,
             security: this.securityModalOverlay,
-            strength: this.strengthModalOverlay
+            strength: this.strengthModalOverlay,
+            privacy: this.privacyModalOverlay
         };
 
         const modal = modals[type];
@@ -908,7 +913,7 @@ class PasswordController {
     }
 
     closeAllModals() {
-        [this.tipsModalOverlay, this.securityModalOverlay, this.strengthModalOverlay].forEach((overlay) => {
+        [this.tipsModalOverlay, this.securityModalOverlay, this.strengthModalOverlay, this.privacyModalOverlay].forEach((overlay) => {
             overlay.classList.remove('active');
         });
         document.body.style.overflow = ''; // Restore scroll

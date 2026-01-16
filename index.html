@@ -434,6 +434,16 @@
                 <li>One-click copy to clipboard</li>
             </ul>
         </aside>
+
+        <footer>
+            <div class="footer-content">
+                <p>&copy; 2026 4gotagain.com</p>
+                <div class="footer-links">
+                    <button id="privacyModalBtn" class="footer-link-btn" aria-haspopup="dialog">Privacy Policy</button>
+                    <!-- <a href="#" class="footer-link">Terms</a> -->
+                </div>
+            </div>
+        </footer>
     </div>
 
     <!-- Memory Tips Modal -->
@@ -483,6 +493,31 @@
             </div>
             <div class="info-modal-content" id="strengthModalContent">
                 <!-- Content populated by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Privacy Policy Modal -->
+    <div id="privacyModalOverlay" class="info-modal-overlay" role="dialog" aria-modal="true"
+        aria-labelledby="privacyModalTitle">
+        <div class="info-modal privacy-modal-theme">
+            <div class="info-modal-header">
+                <h2 id="privacyModalTitle">
+                    <span class="modal-icon">🔒</span>
+                    Privacy Policy
+                </h2>
+                <button class="info-modal-close" aria-label="Close modal">&times;</button>
+            </div>
+            <div class="info-modal-content" id="privacyModalContent">
+                <!-- Content populated by JS or static -->
+                <p><strong>Your Privacy is Paramount.</strong></p>
+                <p>At 4gotagain.com, we believe that the best way to protect your data is not to collect it in the first place.</p>
+                <h3>Does this site use cookies?</h3>
+                <p><strong>No.</strong> We do not use cookies for tracking, analytics, or advertising. We use a standardized technology called "Local Storage" to remember your preferences (like which options you checked) so you don't have to reset them every time you visit. This data stays 100% on your device and is never sent to us.</p>
+                <h3>Does this site store my passwords?</h3>
+                <p><strong>Absolutely not.</strong> All passwords are generated locally in your browser using cryptographic functions. They are never sent over the internet and never stored on any server.</p>
+                <h3>Is there any analytics?</h3>
+                <p><strong>No.</strong> We do not use Google Analytics or any other tracking scripts. We respect your right to generate passwords anonymously.</p>
             </div>
         </div>
     </div>
