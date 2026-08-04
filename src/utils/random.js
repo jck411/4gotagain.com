@@ -1,7 +1,7 @@
 const SEPARATORS = ['-', '_', '.', ':', '/', '|', '~', '='];
 const SYMBOLS = ['!', '@', '#', '$', '%', '^', '&', '*', '+', '='];
 
-const randomIndex = (length) => {
+export const randomIndex = (length) => {
     const buffer = new Uint32Array(1);
     crypto.getRandomValues(buffer);
     return buffer[0] % length;

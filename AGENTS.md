@@ -18,7 +18,7 @@
 - Local preview: `./dev.sh`, then open `http://localhost:8080`.
 - There is no automated test suite; exercise affected generation, copy, keyboard, responsive, and reduced-motion behavior in a browser as relevant.
 - Run `git diff --check` before finishing.
-- When CSS or JavaScript changes, update the corresponding `style.css` or `src/main.js` query version in `index.html` so Cloudflare's immutable asset cache is bypassed.
+- When CSS or JavaScript changes, update the corresponding `style.css` or `src/main.js` query version in `index.html`. The stylesheet is immutable; JavaScript modules revalidate.
 
 ## Deployment
 

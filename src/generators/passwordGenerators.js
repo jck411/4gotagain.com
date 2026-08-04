@@ -1,13 +1,7 @@
 import { WORD_LISTS, RHYME_FAMILIES, RHYMING_OBJECTS } from '../data/wordLists.js';
-import { choose, chooseMany, randomNumber, randomSeparator, randomSymbol } from '../utils/random.js';
+import { choose, chooseMany, randomIndex, randomNumber, randomSeparator, randomSymbol } from '../utils/random.js';
 
 const AMBIGUOUS_CHARS = 'O0oIl1|`\'"{}[]()<>~,.;:';
-
-const randomIndex = (length) => {
-    const buffer = new Uint32Array(1);
-    crypto.getRandomValues(buffer);
-    return buffer[0] % length;
-};
 
 const shuffle = (items) => {
     for (let i = items.length - 1; i > 0; i--) {
@@ -163,19 +157,6 @@ const getWordCandidates = (list, targetLength, minCount = 1) => {
 
 const getRandomWord = (list, useUppercase, targetLength, uppercaseStyle) =>
     maybeCapitalize(choose(getWordCandidates(list, targetLength)), useUppercase, uppercaseStyle);
-
-export const buildCharset = (options) => {
-    let charset = '';
-
-    if (options.uppercase) charset += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    if (options.lowercase) charset += 'abcdefghijklmnopqrstuvwxyz';
-    if (options.numbers) charset += '0123456789';
-    if (options.symbols) charset += '!@#$%^&*()_+-=[]{}|;:,.<>?';
-
-    charset = filterAmbiguous(charset, options.avoidAmbiguous);
-
-    return charset;
-};
 
 export const generateRandomPassword = ({ length, options }) => {
     if (!Number.isFinite(length) || length <= 0) return '';
@@ -529,4 +510,3 @@ export const generateSportsComboPassword = ({
         symbolPosition
     });
 };
-

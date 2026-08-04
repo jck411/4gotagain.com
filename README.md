@@ -28,7 +28,6 @@ dependencies; the local server is needed because the JavaScript uses ES modules.
 
 ## Security model
 
-### Security
 - Uses `crypto.getRandomValues()` for cryptographically secure random generation
 - No passwords are stored or transmitted anywhere
 - All generation happens locally in your browser
@@ -37,7 +36,7 @@ dependencies; the local server is needed because the JavaScript uses ES modules.
 ## Project structure
 
 ```
-4gotagain/
+4gotagain.com/
 ├── index.html          # Main HTML structure
 ├── style.css           # Styling
 ├── src/
@@ -65,11 +64,6 @@ dependencies; the local server is needed because the JavaScript uses ES modules.
 Cloudflare Pages deploys this static repository from `master` with no build
 command and the repository root as the output directory.
 
-> **Status checked 2026-08-01:** the Pages deployment at
-> `4gotagain.pages.dev` returns HTTP 200, but both custom domains currently
-> reset during TLS negotiation. Repair the Pages custom-domain/certificate
-> binding before treating `4gotagain.com` as healthy.
-
 ### Cache-Busting Workflow
 
 When you make code changes, **update the version strings** in `index.html`:
@@ -79,9 +73,9 @@ When you make code changes, **update the version strings** in `index.html`:
 <script type="module" src="src/main.js?v=1.2.0"></script>
 ```
 
-`_headers` keeps HTML revalidated and caches versioned static assets for one
-year. Update the CSS/JavaScript query versions in `index.html` whenever those
-files change.
+`_headers` keeps HTML and JavaScript revalidated and caches the versioned
+stylesheet for one year. Update the CSS/JavaScript query versions in
+`index.html` whenever those files change.
 
 ## License
 
